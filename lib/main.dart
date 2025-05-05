@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:intermediate_flutter/database/db.dart';
 import 'package:intermediate_flutter/localization/main.dart';
 import 'package:intermediate_flutter/provider/auth_provider.dart';
 import 'package:intermediate_flutter/provider/connectivity_provider.dart';
@@ -51,9 +50,8 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    final database = DatabaseRepository();
     super.initState();
-    _routeDelegate = MyRouteDelegate(database);
+    _routeDelegate = MyRouteDelegate();
 
     myRouteInformationParser = MyRouteInformationParser();
   }

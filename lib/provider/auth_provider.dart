@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intermediate_flutter/api/api_service.dart';
-import 'package:intermediate_flutter/database/preferences.dart';
+import 'package:intermediate_flutter/local/preferences.dart';
 import 'package:intermediate_flutter/model/response/login_response.dart';
 import 'package:intermediate_flutter/model/response/login_result.dart';
 import 'package:intermediate_flutter/model/response/logout_response.dart';

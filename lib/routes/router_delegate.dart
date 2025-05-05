@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intermediate_flutter/database/db.dart';
-import 'package:intermediate_flutter/database/preferences.dart';
+import 'package:intermediate_flutter/local/preferences.dart';
 import 'package:intermediate_flutter/localization/main.dart';
 import 'package:intermediate_flutter/model/page_configuration.dart';
 import 'package:intermediate_flutter/provider/auth_provider.dart';
@@ -20,7 +19,6 @@ import 'package:intermediate_flutter/screens/unknown_screen.dart';
 class MyRouteDelegate extends RouterDelegate<PageConfiguration>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin {
   final GlobalKey<NavigatorState> _navigatorKey;
-  final DatabaseRepository database;
   final AuthProvider authProvider = AuthProvider();
   final Preferences preferences = Preferences();
   final LocalizationProvider localizationProvider = LocalizationProvider();
@@ -28,9 +26,7 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
   final StoryProvider storyProvider = StoryProvider();
   final MapProvider mapProvider = MapProvider();
 
-  MyRouteDelegate(
-    this.database,
-  ) : _navigatorKey = GlobalKey<NavigatorState>() {
+  MyRouteDelegate() : _navigatorKey = GlobalKey<NavigatorState>() {
     _init();
   }
 
