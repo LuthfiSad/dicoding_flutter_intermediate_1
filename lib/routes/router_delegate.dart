@@ -56,7 +56,6 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
   String? notificationTitle;
   String? notificationMessage;
   String? networkStatus;
-  String? locationStatus;
 
   List<Page> historyStack = [];
 
@@ -96,11 +95,9 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
         }
 
         if (notificationMessage != null &&
-            notificationTitle != null &&
-            locationStatus != null) {
+            notificationTitle != null) {
           notificationMessage = null;
           notificationTitle = null;
-          locationStatus = null;
           notifyListeners();
           return true;
         }
@@ -334,7 +331,6 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
                           AppLocalizations.of(navigatorKey.currentContext!)!
                               .logoutFailed;
                       notificationMessage = response.message;
-                      locationStatus = response.message;
                       notifyListeners();
                       return;
                     } else if (response.error == false) {

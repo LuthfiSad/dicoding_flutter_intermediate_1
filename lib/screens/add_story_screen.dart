@@ -13,9 +13,9 @@ class AddStoryScreen extends StatefulWidget {
   final Function addStoryButtonOnPressed;
 
   const AddStoryScreen({
-    Key? key,
+    super.key,
     required this.addStoryButtonOnPressed,
-  }) : super(key: key);
+  });
 
   static const String routeName = '/add_story';
 
@@ -207,10 +207,6 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
                           response.error,
                           response.message,
                         );
-
-                        if (!response.error) {
-                          await storyProvider.getAllStories();
-                        }
                       },
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),

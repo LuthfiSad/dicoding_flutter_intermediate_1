@@ -59,7 +59,7 @@ class SplashScreen extends StatelessWidget {
                 'Share Your Journey, Pin Your Story',
                 style: TextStyle(
                   fontSize: 16,
-                  color: Colors.white70,
+                  color: Colors.black54,
                   fontStyle: FontStyle.italic,
                 ),
               ),
