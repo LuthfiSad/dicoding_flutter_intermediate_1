@@ -5,7 +5,6 @@ import 'package:intermediate_flutter/model/page_configuration.dart';
 import 'package:intermediate_flutter/provider/auth_provider.dart';
 import 'package:intermediate_flutter/provider/connectivity_provider.dart';
 import 'package:intermediate_flutter/provider/localization_provider.dart';
-import 'package:intermediate_flutter/provider/map_provider.dart';
 import 'package:intermediate_flutter/provider/story_provider.dart';
 import 'package:intermediate_flutter/screens/add_story_screen.dart';
 import 'package:intermediate_flutter/screens/detail_story_screen.dart';
@@ -24,7 +23,6 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
   final LocalizationProvider localizationProvider = LocalizationProvider();
   final ConnectivityProvider connectivityProvider = ConnectivityProvider();
   final StoryProvider storyProvider = StoryProvider();
-  final MapProvider mapProvider = MapProvider();
 
   MyRouteDelegate() : _navigatorKey = GlobalKey<NavigatorState>() {
     _init();
@@ -56,7 +54,6 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
   String? notificationTitle;
   String? notificationMessage;
   String? networkStatus;
-  String? locationStatus;
 
   List<Page> historyStack = [];
 
@@ -96,11 +93,9 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
         }
 
         if (notificationMessage != null &&
-            notificationTitle != null &&
-            locationStatus != null) {
+            notificationTitle != null) {
           notificationMessage = null;
           notificationTitle = null;
-          locationStatus = null;
           notifyListeners();
           return true;
         }
@@ -144,7 +139,6 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
 
         if (selectedStoryId != null) {
           selectedStoryId = null;
-          mapProvider.clearMarkerAndPlacemark();
           notifyListeners();
           return true;
         }
@@ -334,7 +328,6 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
                           AppLocalizations.of(navigatorKey.currentContext!)!
                               .logoutFailed;
                       notificationMessage = response.message;
-                      locationStatus = response.message;
                       notifyListeners();
                       return;
                     } else if (response.error == false) {

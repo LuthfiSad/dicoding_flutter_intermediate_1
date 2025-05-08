@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intermediate_flutter/components/funky_bouncy_loader.dart';
 import 'package:provider/provider.dart';
-import 'package:intermediate_flutter/components/google_maps.dart';
 import 'package:intermediate_flutter/components/my_app_bar.dart';
 import 'package:intermediate_flutter/localization/main.dart';
 import 'package:intermediate_flutter/provider/localization_provider.dart';
@@ -221,50 +220,6 @@ class _DetailStoryScreenState extends State<DetailStoryScreen>
                             textAlign: TextAlign.justify,
                           ),
                         ),
-
-                        const SizedBox(height: 24),
-
-                        // Location Section
-                        if (storyProvider.detailStory.lat != null &&
-                            storyProvider.detailStory.lon != null) ...[
-                          Divider(
-                            color: theme.colorScheme.outline.withOpacity(0.2),
-                          ),
-                          const SizedBox(height: 8),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.location_on_outlined,
-                                color: theme.colorScheme.primary,
-                              ),
-                              const SizedBox(width: 8),
-                              Text(
-                                AppLocalizations.of(context)!.locationLabel,
-                                style: theme.textTheme.titleMedium?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 16),
-                          Container(
-                            height: 300,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.1),
-                                  blurRadius: 8,
-                                  spreadRadius: 1,
-                                ),
-                              ],
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
-                              child: const MyGoogleMaps(),
-                            ),
-                          ),
-                        ],
                       ],
                     ),
                   ),

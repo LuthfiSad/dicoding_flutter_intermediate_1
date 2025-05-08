@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intermediate_flutter/components/funky_bouncy_loader.dart';
 import 'package:provider/provider.dart';
 // import 'package:intermediate_flutter/components/custom_loading.dart';
 import 'package:intermediate_flutter/components/story_card.dart';
 import 'package:intermediate_flutter/model/story.dart';
-import 'package:intermediate_flutter/provider/map_provider.dart';
 import 'package:intermediate_flutter/provider/story_provider.dart';
 import 'dart:math' as math;
 
@@ -60,8 +58,8 @@ class _StoryListState extends State<StoryList> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<StoryProvider, MapProvider>(
-      builder: (context, storyProvider, mapProvider, child) {
+    return Consumer<StoryProvider>(
+      builder: (context, storyProvider, child) {
         if (storyProvider.isFetching == true && storyProvider.pageItems == 1) {
           return Center(
             child: AnimatedBuilder(
@@ -114,28 +112,10 @@ class _StoryListState extends State<StoryList> with TickerProviderStateMixin {
                   description: story.description,
                   photoUrl: story.photoUrl,
                   createdAt: story.createdAt,
-                  lat: story.lat ?? 0,
-                  lon: story.lon ?? 0,
                   onTapped: () async {
                     context.read<StoryProvider>().setIsFetching(true);
-                    context.read<MapProvider>().clearMarkerAndPlacemark();
                     context.read<StoryProvider>().getDetailStories(story.id);
-                    if (story.lat != null && story.lon != null) {
-                      var userLatLng = LatLng(
-                        story.lat ?? 0,
-                        story.lon ?? 0,
-                      );
-                      var response = await context
-                          .read<MapProvider>()
-                          .setUserLatLng(userLatLng);
-                      if (response.error == true) {
-                        widget.onTapped(story.id, response);
-                      } else {
-                        widget.onTapped(story.id, response);
-                      }
-                    } else {
-                      widget.onTapped(story.id, null);
-                    }
+                    widget.onTapped(story.id, null);
                   },
                 ),
               );

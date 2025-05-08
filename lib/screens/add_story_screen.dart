@@ -2,11 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:intermediate_flutter/components/google_maps.dart';
 import 'package:intermediate_flutter/components/my_app_bar.dart';
 import 'package:intermediate_flutter/localization/main.dart';
 import 'package:intermediate_flutter/provider/localization_provider.dart';
-import 'package:intermediate_flutter/provider/map_provider.dart';
 import 'package:intermediate_flutter/provider/story_provider.dart';
 
 class AddStoryScreen extends StatefulWidget {
@@ -48,13 +46,6 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
                     : const Locale('en'),
           );
         },
-        needStoryWithLocationButton: true,
-        storyWithLocationButtonOnPressed: () {
-          storyProvider.setStoryNeedLocation(!storyProvider.isStoryNeedLocation);
-        },
-        storyWithLocationButtonColor: storyProvider.isStoryNeedLocation
-            ? Colors.red
-            : Colors.white,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -136,42 +127,6 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
             ),
             const SizedBox(height: 24),
 
-            // Location Toggle Section
-            if (storyProvider.isStoryNeedLocation) ...[
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.surfaceVariant.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(Icons.location_on, 
-                            color: theme.colorScheme.primary),
-                        const SizedBox(width: 8),
-                        Text(
-                          AppLocalizations.of(context)!.locationLabel,
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    const SizedBox(
-                      height: 200,
-                      child: MyGoogleMaps(),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 24),
-            ],
-
             // Story Content Section
             TextFormField(
               controller: _contentController,
@@ -198,9 +153,7 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
                     : () async {
                         final response = await storyProvider.addNewStory(
                           _contentController.text,
-                          AppLocalizations.of(context)!.imageNotFound,
-                          context.read<MapProvider>().userLocation!.latitude,
-                          context.read<MapProvider>().userLocation!.longitude,
+                          AppLocalizations.of(context)!.imageNotFound
                         );
 
                         widget.addStoryButtonOnPressed(

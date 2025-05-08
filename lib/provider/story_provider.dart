@@ -18,7 +18,6 @@ class StoryProvider extends ChangeNotifier {
   String? _imagePath;
   bool _isLoggingIn = false;
   bool _isFetching = false;
-  bool storyNeedLocation = false;
 
   List<Story> get stories => _stories;
   DetailStory get detailStory => _detailStory;
@@ -26,7 +25,6 @@ class StoryProvider extends ChangeNotifier {
   String? get imagePath => _imagePath;
   bool get isLoggingIn => _isLoggingIn;
   bool get isFetching => _isFetching;
-  bool get isStoryNeedLocation => storyNeedLocation;
 
   StoryProvider() {
     initDetailStory();
@@ -45,14 +43,6 @@ class StoryProvider extends ChangeNotifier {
 
   void setIsLoggingIn(bool isLoggingIn) {
     _isLoggingIn = isLoggingIn;
-    notifyListeners();
-  }
-
-  void setStoryNeedLocation(bool value) {
-    _stories.clear();
-    pageItems = 1;
-    storyNeedLocation = value;
-    getAllStories();
     notifyListeners();
   }
 
@@ -92,7 +82,6 @@ class StoryProvider extends ChangeNotifier {
       userToken,
       pageItems!,
       sizeItems,
-      storyNeedLocation ? 1 : 0,
     );
     notifyListeners();
 
@@ -133,8 +122,6 @@ class StoryProvider extends ChangeNotifier {
   Future<AddNewStoryRepsonse> addNewStory(
     String description,
     String errorMesssage,
-    double lat,
-    double lon,
   ) async {
     setIsFetching(true);
     final userToken = await _preferences.getUserToken();
@@ -153,8 +140,6 @@ class StoryProvider extends ChangeNotifier {
       bytes,
       fileName,
       userToken!,
-      lat,
-      lon,
     );
 
     if (response.error == false) {

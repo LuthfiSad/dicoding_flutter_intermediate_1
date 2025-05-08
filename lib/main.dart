@@ -4,7 +4,6 @@ import 'package:intermediate_flutter/localization/main.dart';
 import 'package:intermediate_flutter/provider/auth_provider.dart';
 import 'package:intermediate_flutter/provider/connectivity_provider.dart';
 import 'package:intermediate_flutter/provider/localization_provider.dart';
-import 'package:intermediate_flutter/provider/map_provider.dart';
 import 'package:intermediate_flutter/provider/story_provider.dart';
 import 'package:intermediate_flutter/routes/route_information_parser.dart';
 import 'package:intermediate_flutter/routes/router_delegate.dart';
@@ -27,9 +26,6 @@ main() async {
         ),
         ChangeNotifierProvider(
           create: (_) => ConnectivityProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => MapProvider(),
         ),
       ],
       child: const MyApp(),

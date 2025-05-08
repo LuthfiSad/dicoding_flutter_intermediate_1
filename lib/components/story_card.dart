@@ -6,8 +6,6 @@ class StoryCard extends StatelessWidget {
   final String description;
   final String photoUrl;
   final DateTime createdAt;
-  final double lat;
-  final double lon;
   final Function onTapped;
 
   const StoryCard({
@@ -17,8 +15,6 @@ class StoryCard extends StatelessWidget {
     required this.description,
     required this.photoUrl,
     required this.createdAt,
-    required this.lat,
-    required this.lon,
     required this.onTapped,
   });
 
@@ -94,31 +90,6 @@ class StoryCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                if (lat != 0 && lon != 0)
-                  Positioned(
-                    top: 8,
-                    right: 8,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: theme.colorScheme.primary,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.location_on, 
-                              size: 14, 
-                              color: theme.colorScheme.onPrimary),
-                          const SizedBox(width: 4),
-                          Text('Location',
-                              style: theme.textTheme.labelSmall?.copyWith(
-                                  color: theme.colorScheme.onPrimary)),
-                        ],
-                      ),
-                    ),
-                  ),
               ],
             ),
             

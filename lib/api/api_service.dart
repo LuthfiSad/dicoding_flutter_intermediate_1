@@ -61,8 +61,6 @@ class ApiService {
     List<int> bytes,
     String fileName,
     String userToken,
-    double lat,
-    double lon,
   ) async {
     var url = '$baseUrl/stories';
     http.MultipartRequest request =
@@ -79,8 +77,6 @@ class ApiService {
 
     Map<String, String> body = {
       'description': description,
-      'lat': lat.toString(),
-      'lon': lon.toString(),
     };
 
     final multiPartFile = http.MultipartFile.fromBytes(
@@ -132,11 +128,9 @@ class ApiService {
     String? userToken,
     int pageItems,
     int sizeItem,
-    int needLocation,
   ) async {
-    print("needLocation $needLocation");
     var url =
-        '$baseUrl/stories?page=$pageItems&size=$sizeItem&location=$needLocation';
+        '$baseUrl/stories?page=$pageItems&size=$sizeItem';
     var headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $userToken'

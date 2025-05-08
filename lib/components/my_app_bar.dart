@@ -7,10 +7,6 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Function? logoutButtonOnPressed;
   final bool? needChangeLanguageButton;
   final Function? changeLanguageButtonOnPressed;
-  final bool? needStoryWithLocationButton;
-  final Function? storyWithLocationButtonOnPressed;
-  final Color? storyWithLocationButtonColor;
-  final IconData? storyWithLocationButtonIcon;
 
   const MyAppBar({
     super.key,
@@ -19,10 +15,6 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.logoutButtonOnPressed,
     this.needChangeLanguageButton,
     this.changeLanguageButtonOnPressed,
-    this.needStoryWithLocationButton,
-    this.storyWithLocationButtonOnPressed,
-    this.storyWithLocationButtonColor,
-    this.storyWithLocationButtonIcon,
   });
 
   @override
@@ -67,44 +59,6 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ),
         actions: [
-          if (needStoryWithLocationButton == true)
-            Container(
-              margin: const EdgeInsets.symmetric(vertical: 8),
-              decoration: BoxDecoration(
-                color: storyWithLocationButtonColor?.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: storyWithLocationButtonColor ?? Colors.transparent,
-                  width: 1,
-                ),
-              ),
-              child: TextButton(
-                onPressed: () => storyWithLocationButtonOnPressed!(),
-                style: TextButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                ),
-                child: Row(
-                  children: [
-                    Icon(
-                      storyWithLocationButtonIcon,
-                      color: storyWithLocationButtonColor,
-                      size: storyWithLocationButtonIcon == null ? 0 : 20,
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      storyWithLocationButtonColor == Colors.red
-                          ? AppLocalizations.of(context)!.onlyStory
-                          : AppLocalizations.of(context)!.withLocation,
-                      style: TextStyle(
-                        color: storyWithLocationButtonColor,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          
           if (needChangeLanguageButton == true) ...[
             const SizedBox(width: 8),
             Container(
