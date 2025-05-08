@@ -11,11 +11,11 @@ class StoryScreen extends StatelessWidget {
   final Function onAddStoryButtonPressed;
 
   const StoryScreen({
-    Key? key,
+    super.key,
     required this.logoutButtonOnPressed,
     required this.onTapped,
     required this.onAddStoryButtonPressed,
-  }) : super(key: key);
+  });
 
   static const String routeName = '/story';
 
@@ -46,8 +46,8 @@ class StoryScreen extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.only(
                     top: MediaQuery.of(context).size.height * 0.015,
-                    left: MediaQuery.of(context).size.width * 0.10,
-                    right: MediaQuery.of(context).size.width * 0.10,
+                    left: MediaQuery.of(context).size.width * 0.040,
+                    right: MediaQuery.of(context).size.width * 0.040,
                     bottom: MediaQuery.of(context).size.height * 0.015,
                   ),
                   child: StoryList(

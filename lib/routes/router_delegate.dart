@@ -315,24 +315,45 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
           key: const ValueKey('StoryPage'),
           child: StoryScreen(
             logoutButtonOnPressed: () async {
-              var response = await authProvider.logout();
-              if (response.error == true) {
-                notificationTitle =
-                    AppLocalizations.of(navigatorKey.currentContext!)!
-                        .logoutFailed;
-                notificationMessage = response.message;
-                locationStatus = response.message;
-                notifyListeners();
-                return;
-              } else if (response.error == false) {
-                notificationTitle =
-                    AppLocalizations.of(navigatorKey.currentContext!)!.success;
-                notificationMessage =
-                    AppLocalizations.of(navigatorKey.currentContext!)!
-                        .logoutSuccess;
-              }
-              isLoggedIn = false;
-              notifyListeners();
+              // Tampilkan dialog konfirmasi logout terlebih dahulu
+              Navigator.of(navigatorKey.currentContext!).push(
+                MyDialog(
+                  title: AppLocalizations.of(navigatorKey.currentContext!)!
+                      .confirmLogout,
+                  message: AppLocalizations.of(navigatorKey.currentContext!)!
+                      .logoutConfirmMessage,
+                  showTwoActions: true,
+                  onOk: () async {
+                    // Tutup dialog
+                    Navigator.of(navigatorKey.currentContext!).pop();
+
+                    // Jalankan proses logout jika user memilih "Ya"
+                    var response = await authProvider.logout();
+                    if (response.error == true) {
+                      notificationTitle =
+                          AppLocalizations.of(navigatorKey.currentContext!)!
+                              .logoutFailed;
+                      notificationMessage = response.message;
+                      locationStatus = response.message;
+                      notifyListeners();
+                      return;
+                    } else if (response.error == false) {
+                      notificationTitle =
+                          AppLocalizations.of(navigatorKey.currentContext!)!
+                              .success;
+                      notificationMessage =
+                          AppLocalizations.of(navigatorKey.currentContext!)!
+                              .logoutSuccess;
+                    }
+                    isLoggedIn = false;
+                    notifyListeners();
+                  },
+                  onCancel: () {
+                    // Hanya tutup dialog jika user memilih "Tidak"
+                    Navigator.of(navigatorKey.currentContext!).pop();
+                  },
+                ).createRoute(navigatorKey.currentContext!),
+              );
             },
             onTapped: (String id, response) async {
               if (response != null) {

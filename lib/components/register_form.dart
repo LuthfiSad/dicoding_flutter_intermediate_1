@@ -11,11 +11,11 @@ class RegisterForm extends StatelessWidget {
   final TextEditingController passwordController;
 
   const RegisterForm({
-    Key? key,
+    super.key,
     required this.nameController,
     required this.emailController,
     required this.passwordController,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -61,6 +61,19 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'Story App',
       theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFF1E88E5),
+          secondary: const Color(0xFF8D6E63), // Elegant brownish-tan
+          secondaryContainer: const Color(0xFF5D4037), // Deep brown
+          primary: const Color(0xFF9E9D24), // Olive yellow-green
+          primaryContainer: const Color(0xFF827717), // Darker olive
+          surface: Colors.white,
+          onPrimary: Colors.white,
+          onSecondary: Colors.white,
+          onSurface: Colors.black,
+          error: Colors.red,
+          onError: Colors.white,
+        ),
         primarySwatch: Colors.blue,
       ),
       localizationsDelegates: AppLocalizations.localizationsDelegates,

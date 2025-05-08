@@ -12,11 +12,16 @@
   "content": "Your story description",
   "upload": "Upload",
   "login": "Login",
+  "loginDesc": "Login to your account",
   "register": "Register",
+  "registerDesc": "Create your account",
+  "confirmLogout": "Logout",
+  "logoutConfirmMessage": "Are you sure want to logout?",
   "dontHaveAccount": "Don't have an account?",
   "signUp": "Sign Up",
   "haveAccount": "Have an account?",
   "signIn": "Sign In",
+  "or": "OR",
   "name": "Name",
   "email": "Email",
   "password": "Password",
@@ -47,5 +52,9 @@
   "networkError": "Network error",
   "networkErrorMessage": "Please check your internet connection",
   "serverError": "Server error",
-  "locationError": "Location error"
+  "locationError": "Location error",
+  "noImageSelected": "No image selected",
+  "changeLanguage": "Change Language",
+  "withLocation": "With Location",
+  "onlyStory": "Story"
 }
