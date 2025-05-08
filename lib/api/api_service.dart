@@ -101,15 +101,13 @@ class ApiService {
   }
 
   Future<AddNewStoryRepsonseGuest> addNewStoryGuest(String name,
-      String description, String photoUrl, double lat, double lon) async {
+      String description, String photoUrl) async {
     var url = '$baseUrl/stories/guest';
 
     var body = {
       'name': name,
       'description': description,
       'photoUrl': photoUrl,
-      'lat': lat,
-      'lon': lon,
     };
 
     try {

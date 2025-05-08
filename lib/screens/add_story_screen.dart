@@ -160,10 +160,6 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
                           response.error,
                           response.message,
                         );
-
-                        if (!response.error) {
-                          await storyProvider.getAllStories();
-                        }
                       },
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
