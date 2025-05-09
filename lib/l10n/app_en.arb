@@ -56,5 +56,6 @@
   "noImageSelected": "No image selected",
   "changeLanguage": "Change Language",
   "withLocation": "With Location",
-  "onlyStory": "Story"
+  "onlyStory": "Story",
+  "selectedMapType": "Select Map Type"
 }

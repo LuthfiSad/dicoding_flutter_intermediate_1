@@ -55,5 +55,6 @@
   "noImageSelected": "Tidak ada gambar yang dipilih",
   "changeLanguage": "Ganti Bahasa",
   "withLocation": "Dengan Lokasi",
-  "onlyStory": "Cerita"
+  "onlyStory": "Cerita",
+  "selectedMapType": "Pilih Tipe Peta"
 }

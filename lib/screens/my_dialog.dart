@@ -109,11 +109,7 @@ class MyDialog extends Page {
                                   onPressed: () {
                                     context.read<AuthProvider>().setIsFetching(false);
                                     context.read<StoryProvider>().setIsFetching(false);
-                                    if (onCancel != null) {
-                                      onCancel!();
-                                    } else {
-                                      Navigator.of(context).pop(false);
-                                    }
+                                    onCancel!();
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.grey[300],

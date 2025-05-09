@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intermediate_flutter/components/google_maps.dart';
 import 'package:intermediate_flutter/local/preferences.dart';
 import 'package:intermediate_flutter/localization/main.dart';
 import 'package:intermediate_flutter/model/page_configuration.dart';
@@ -32,13 +34,23 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
 
   void _init() async {
     isLoggedIn = await preferences.getUserToken() != null;
+
+    await Future.delayed(const Duration(seconds: 2));
+
     await connectivityProvider.initConnectivity();
     var connectionStatus = connectivityProvider.connectionStatus.toString();
+
     if (connectionStatus == 'ConnectivityResult.none') {
-      networkStatus = AppLocalizations.of(navigatorKey.currentContext!)!
-          .networkErrorMessage;
-      noConnection = true;
-      notifyListeners();
+      await Future.delayed(const Duration(milliseconds: 500));
+      await connectivityProvider.initConnectivity();
+      connectionStatus = connectivityProvider.connectionStatus.toString();
+
+      if (connectionStatus == 'ConnectivityResult.none') {
+        networkStatus = AppLocalizations.of(navigatorKey.currentContext!)!
+            .networkErrorMessage;
+        noConnection = true;
+        notifyListeners();
+      }
     }
     notifyListeners();
   }
@@ -56,6 +68,9 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
   String? notificationTitle;
   String? notificationMessage;
   String? networkStatus;
+
+  bool showLogoutDialog = false;
+  bool showMapTypeDialog = false;
 
   List<Page> historyStack = [];
 
@@ -94,8 +109,7 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
           return true;
         }
 
-        if (notificationMessage != null &&
-            notificationTitle != null) {
+        if (notificationMessage != null && notificationTitle != null) {
           notificationMessage = null;
           notificationTitle = null;
           notifyListeners();
@@ -146,6 +160,18 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
           return true;
         }
 
+        if (showLogoutDialog) {
+          showLogoutDialog = false;
+          notifyListeners();
+          return true;
+        }
+
+        if (showMapTypeDialog) {
+          showMapTypeDialog = false;
+          notifyListeners();
+          return true;
+        }
+
         selectedStoryId = null;
         isRegister = false;
         addStory = false;
@@ -156,9 +182,51 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
     );
   }
 
+  void showLogoutConfirmation() {
+    showLogoutDialog = true;
+    notifyListeners();
+  }
+
+  void showMapTypeSelection() {
+    showMapTypeDialog = true;
+    notifyListeners();
+  }
+
+  void closeDialog() {
+    showLogoutDialog = false;
+    showMapTypeDialog = false;
+    notifyListeners();
+  }
+
+  void performLogout() async {
+    showLogoutDialog = false;
+
+    var response = await authProvider.logout();
+    if (response.error == true) {
+      notificationTitle =
+          AppLocalizations.of(navigatorKey.currentContext!)!.logoutFailed;
+      notificationMessage = response.message;
+    } else if (response.error == false) {
+      notificationTitle =
+          AppLocalizations.of(navigatorKey.currentContext!)!.success;
+      notificationMessage =
+          AppLocalizations.of(navigatorKey.currentContext!)!.logoutSuccess;
+      isLoggedIn = false;
+    }
+    notifyListeners();
+  }
+
+  void navigateToHome() {
+    selectedStoryId = null;
+    addStory = false;
+    notifyListeners();
+  }
+
   @override
   PageConfiguration? get currentConfiguration {
     if (isLoggedIn == null) {
+      return PageConfiguration.splash();
+    } else if (isLoggedIn == null) {
       return PageConfiguration.splash();
     } else if (isRegister == true) {
       return PageConfiguration.register();
@@ -302,6 +370,8 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
             onOk: () {
               notificationMessage = null;
               notificationTitle = null;
+              noConnection = false;
+              networkStatus = null;
               notifyListeners();
             },
           ),
@@ -311,45 +381,8 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
         MaterialPage(
           key: const ValueKey('StoryPage'),
           child: StoryScreen(
-            logoutButtonOnPressed: () async {
-              // Tampilkan dialog konfirmasi logout terlebih dahulu
-              Navigator.of(navigatorKey.currentContext!).push(
-                MyDialog(
-                  title: AppLocalizations.of(navigatorKey.currentContext!)!
-                      .confirmLogout,
-                  message: AppLocalizations.of(navigatorKey.currentContext!)!
-                      .logoutConfirmMessage,
-                  showTwoActions: true,
-                  onOk: () async {
-                    // Tutup dialog
-                    Navigator.of(navigatorKey.currentContext!).pop();
-
-                    // Jalankan proses logout jika user memilih "Ya"
-                    var response = await authProvider.logout();
-                    if (response.error == true) {
-                      notificationTitle =
-                          AppLocalizations.of(navigatorKey.currentContext!)!
-                              .logoutFailed;
-                      notificationMessage = response.message;
-                      notifyListeners();
-                      return;
-                    } else if (response.error == false) {
-                      notificationTitle =
-                          AppLocalizations.of(navigatorKey.currentContext!)!
-                              .success;
-                      notificationMessage =
-                          AppLocalizations.of(navigatorKey.currentContext!)!
-                              .logoutSuccess;
-                    }
-                    isLoggedIn = false;
-                    notifyListeners();
-                  },
-                  onCancel: () {
-                    // Hanya tutup dialog jika user memilih "Tidak"
-                    Navigator.of(navigatorKey.currentContext!).pop();
-                  },
-                ).createRoute(navigatorKey.currentContext!),
-              );
+            logoutButtonOnPressed: () {
+              showLogoutConfirmation();
             },
             onTapped: (String id, response) async {
               if (response != null) {
@@ -376,6 +409,73 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
             },
           ),
         ),
+        if (showLogoutDialog)
+          MyDialog(
+            title: AppLocalizations.of(navigatorKey.currentContext!)!
+                .confirmLogout,
+            message: AppLocalizations.of(navigatorKey.currentContext!)!
+                .logoutConfirmMessage,
+            showTwoActions: true,
+            onOk: () {
+              performLogout();
+            },
+            onCancel: () {
+              closeDialog();
+            },
+          ),
+        if (showMapTypeDialog)
+          MaterialPage(
+            key: const ValueKey('MapTypeDialogPage'),
+            child: AlertDialog(
+              title: Text(AppLocalizations.of(navigatorKey.currentContext!)!
+                  .selectedMapType),
+              content: Wrap(
+                spacing: 8,
+                children: [
+                  MapTypeButton(
+                    icon: Icons.map,
+                    label: 'Normal',
+                    type: MapType.normal,
+                    currentType: mapProvider.selectedMapType,
+                    onPressed: () {
+                      mapProvider.changeMapType(MapType.normal);
+                      closeDialog();
+                    },
+                  ),
+                  MapTypeButton(
+                    icon: Icons.satellite,
+                    label: 'Satellite',
+                    type: MapType.satellite,
+                    currentType: mapProvider.selectedMapType,
+                    onPressed: () {
+                      mapProvider.changeMapType(MapType.satellite);
+                      closeDialog();
+                    },
+                  ),
+                  MapTypeButton(
+                    icon: Icons.terrain,
+                    label: 'Terrain',
+                    type: MapType.terrain,
+                    currentType: mapProvider.selectedMapType,
+                    onPressed: () {
+                      mapProvider.changeMapType(MapType.terrain);
+                      closeDialog();
+                    },
+                  ),
+                  MapTypeButton(
+                    icon: Icons.layers,
+                    label: 'Hybrid',
+                    type: MapType.hybrid,
+                    currentType: mapProvider.selectedMapType,
+                    onPressed: () {
+                      mapProvider.changeMapType(MapType.hybrid);
+                      closeDialog();
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
         if (selectedStoryId != null)
           MaterialPage(
             key: const ValueKey('StoryDetailPage'),
@@ -431,6 +531,8 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
             onOk: () {
               notificationMessage = null;
               notificationTitle = null;
+              noConnection = false;
+              networkStatus = null;
               notifyListeners();
             },
           ),
