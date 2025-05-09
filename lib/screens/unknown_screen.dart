@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:intermediate_flutter/routes/router_delegate.dart';
+import 'package:provider/provider.dart';
 
 class UnknownScreen extends StatelessWidget {
   const UnknownScreen({super.key});
@@ -47,7 +49,7 @@ class UnknownScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              
+
               // Creative illustration (using Flutter's built-in icons)
               Icon(
                 Icons.explore_off_rounded,
@@ -55,7 +57,7 @@ class UnknownScreen extends StatelessWidget {
                 color: isDark ? Colors.blueGrey[300] : Colors.blueGrey[600],
               ),
               const SizedBox(height: 30),
-              
+
               // Main message
               Text(
                 'Lost in Space!',
@@ -66,7 +68,7 @@ class UnknownScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 15),
-              
+
               // Sub message
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 40),
@@ -80,28 +82,34 @@ class UnknownScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 40),
-              
+
               // Home button
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: isDark ? Colors.blue[800] : Colors.blue[600],
-                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.of(context).popUntil((route) => route.isFirst);
+              Consumer<MyRouteDelegate>(
+                builder: (context, routeDelegate, child) {
+                  return ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          isDark ? Colors.blue[800] : Colors.blue[600],
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 32, vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).popUntil((route) => route.isFirst);
+                    },
+                    child: const Text(
+                      'Beam Me Home',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  );
                 },
-                child: const Text(
-                  'Beam Me Home',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
+              )
             ],
           ),
         ),

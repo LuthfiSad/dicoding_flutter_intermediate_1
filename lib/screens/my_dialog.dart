@@ -56,7 +56,8 @@ class MyDialog extends Page {
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         color: Theme.of(context).primaryColor.withOpacity(0.1),
-                        borderRadius: const BorderRadius.all(Radius.circular(15)),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(15)),
                       ),
                       child: Row(
                         children: [
@@ -78,7 +79,7 @@ class MyDialog extends Page {
                         ],
                       ),
                     ),
-                    
+
                     // Dialog content
                     Padding(
                       padding: const EdgeInsets.symmetric(
@@ -91,10 +92,11 @@ class MyDialog extends Page {
                         textAlign: TextAlign.center,
                       ),
                     ),
-                    
+
                     // Dialog actions
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
                       child: Row(
                         mainAxisAlignment: showTwoActions
                             ? MainAxisAlignment.spaceEvenly
@@ -107,18 +109,19 @@ class MyDialog extends Page {
                                 padding: const EdgeInsets.only(right: 8),
                                 child: ElevatedButton(
                                   onPressed: () {
-                                    context.read<AuthProvider>().setIsFetching(false);
-                                    context.read<StoryProvider>().setIsFetching(false);
-                                    if (onCancel != null) {
-                                      onCancel!();
-                                    } else {
-                                      Navigator.of(context).pop(false);
-                                    }
+                                    context
+                                        .read<AuthProvider>()
+                                        .setIsFetching(false);
+                                    context
+                                        .read<StoryProvider>()
+                                        .setIsFetching(false);
+                                    onCancel!();
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.grey[300],
                                     foregroundColor: Colors.black87,
-                                    padding: const EdgeInsets.symmetric(vertical: 12),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 12),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(8),
                                     ),
@@ -128,21 +131,28 @@ class MyDialog extends Page {
                               ),
                             ),
                           ],
-                          
+
                           // OK button (Yes)
                           Expanded(
                             child: Padding(
-                              padding: EdgeInsets.only(left: showTwoActions ? 8 : 0),
+                              padding:
+                                  EdgeInsets.only(left: showTwoActions ? 8 : 0),
                               child: ElevatedButton(
                                 onPressed: () {
-                                  context.read<AuthProvider>().setIsFetching(false);
-                                  context.read<StoryProvider>().setIsFetching(false);
+                                  context
+                                      .read<AuthProvider>()
+                                      .setIsFetching(false);
+                                  context
+                                      .read<StoryProvider>()
+                                      .setIsFetching(false);
                                   onOk();
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Theme.of(context).primaryColor,
+                                  backgroundColor:
+                                      Theme.of(context).primaryColor,
                                   foregroundColor: Colors.white,
-                                  padding: const EdgeInsets.symmetric(vertical: 12),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 12),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8),
                                   ),
