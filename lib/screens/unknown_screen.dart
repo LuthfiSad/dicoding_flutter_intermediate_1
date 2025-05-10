@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:intermediate_flutter/routes/router_delegate.dart';
-import 'package:provider/provider.dart';
 
-class UnknownScreen extends StatelessWidget {
-  const UnknownScreen({super.key});
+class UnknownScreen extends StatefulWidget {
+  final Function() backHome;
+  const UnknownScreen({super.key, required this.backHome});
 
   static const String routeName = '/unknown';
 
+  @override
+  State<UnknownScreen> createState() => _UnknownScreenState();
+}
+
+class _UnknownScreenState extends State<UnknownScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -82,34 +86,27 @@ class UnknownScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 40),
-
-              // Home button
-              Consumer<MyRouteDelegate>(
-                builder: (context, routeDelegate, child) {
-                  return ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          isDark ? Colors.blue[800] : Colors.blue[600],
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 32, vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).popUntil((route) => route.isFirst);
-                    },
-                    child: const Text(
-                      'Beam Me Home',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  );
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: isDark ? Colors.blue[800] : Colors.blue[600],
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                onPressed: () {
+                  widget.backHome();
                 },
-              )
+                child: const Text(
+                  'Beam Me Home',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
             ],
           ),
         ),

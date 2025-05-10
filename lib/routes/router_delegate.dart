@@ -188,12 +188,6 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
     notifyListeners();
   }
 
-  void navigateToHome() {
-    selectedStoryId = null;
-    addStory = false;
-    notifyListeners();
-  }
-
   @override
   PageConfiguration? get currentConfiguration {
     if (isLoggedIn == null) {
@@ -244,10 +238,15 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
     notifyListeners();
   }
 
-  List<Page> get _unknownStack => const [
+  List<Page> get _unknownStack => [
         MaterialPage(
-          key: ValueKey('UnknownPage'),
-          child: UnknownScreen(),
+          key: const ValueKey('UnknownPage'),
+          child: UnknownScreen(
+            backHome: () {
+              isUnknown = false;
+              notifyListeners();
+            },
+          ),
         ),
       ];
 
