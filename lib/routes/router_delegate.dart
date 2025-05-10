@@ -217,8 +217,7 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
   }
 
   void navigateToHome() {
-    selectedStoryId = null;
-    addStory = false;
+    isUnknown = false;
     notifyListeners();
   }
 
@@ -274,10 +273,12 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
     notifyListeners();
   }
 
-  List<Page> get _unknownStack => const [
+  List<Page> get _unknownStack => [
         MaterialPage(
-          key: ValueKey('UnknownPage'),
-          child: UnknownScreen(),
+          key: const ValueKey('UnknownPage'),
+          child: UnknownScreen(
+            backHome: () => navigateToHome(),
+          ),
         ),
       ];
 
