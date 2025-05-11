@@ -5,8 +5,7 @@ import 'package:intermediate_flutter/components/placemark.dart';
 import 'package:intermediate_flutter/provider/map_provider.dart';
 
 class MyGoogleMaps extends StatefulWidget {
-  final Function showMapTypeSelection;
-  const MyGoogleMaps({super.key, required this.showMapTypeSelection});
+  const MyGoogleMaps({super.key});
 
   @override
   State<MyGoogleMaps> createState() => _GoogleMapsState();
@@ -48,14 +47,11 @@ class _GoogleMapsState extends State<MyGoogleMaps> {
                   mapController = controller;
                 },
               ),
-
-              // Map Controls Container
               Positioned(
                 top: 16,
                 right: 16,
                 child: Column(
                   children: [
-                    // My Location Button
                     FloatingActionButton(
                       heroTag: 'my-location',
                       backgroundColor: theme.colorScheme.primary,
@@ -66,21 +62,80 @@ class _GoogleMapsState extends State<MyGoogleMaps> {
                       },
                     ),
                     const SizedBox(height: 8),
-                    // Map Type Button
-                    FloatingActionButton(
-                          heroTag: 'map-type',
-                          backgroundColor: theme.colorScheme.primary,
-                          child: Icon(Icons.layers,
-                              color: theme.colorScheme.onPrimary),
-                          onPressed: () {
-                            widget.showMapTypeSelection();
-                          },
-                        )
+                    // FloatingActionButton(
+                    //   heroTag: 'map-type',
+                    //   backgroundColor: theme.colorScheme.primary,
+                    //   child: Icon(Icons.layers,
+                    //       color: theme.colorScheme.onPrimary),
+                    //   onPressed: () {
+                    //     showModalBottomSheet(
+                    //       context: context,
+                    //       builder: (context) => Container(
+                    //         padding: const EdgeInsets.all(16),
+                    //         child: Column(
+                    //           mainAxisSize: MainAxisSize.min,
+                    //           children: [
+                    //             Text('Select Map Type',
+                    //                 style: theme.textTheme.titleMedium),
+                    //             const SizedBox(height: 16),
+                    //             Wrap(
+                    //               spacing: 8,
+                    //               children: [
+                    //                 MapTypeButton(
+                    //                   icon: Icons.map,
+                    //                   label: 'Normal',
+                    //                   type: MapType.normal,
+                    //                   currentType: mapProvider.selectedMapType,
+                    //                   onPressed: () {
+                    //                     mapProvider
+                    //                         .changeMapType(MapType.normal);
+                    //                     Navigator.pop(context);
+                    //                   },
+                    //                 ),
+                    //                 MapTypeButton(
+                    //                   icon: Icons.satellite,
+                    //                   label: 'Satellite',
+                    //                   type: MapType.satellite,
+                    //                   currentType: mapProvider.selectedMapType,
+                    //                   onPressed: () {
+                    //                     mapProvider
+                    //                         .changeMapType(MapType.satellite);
+                    //                     Navigator.pop(context);
+                    //                   },
+                    //                 ),
+                    //                 MapTypeButton(
+                    //                   icon: Icons.terrain,
+                    //                   label: 'Terrain',
+                    //                   type: MapType.terrain,
+                    //                   currentType: mapProvider.selectedMapType,
+                    //                   onPressed: () {
+                    //                     mapProvider
+                    //                         .changeMapType(MapType.terrain);
+                    //                     Navigator.pop(context);
+                    //                   },
+                    //                 ),
+                    //                 MapTypeButton(
+                    //                   icon: Icons.layers,
+                    //                   label: 'Hybrid',
+                    //                   type: MapType.hybrid,
+                    //                   currentType: mapProvider.selectedMapType,
+                    //                   onPressed: () {
+                    //                     mapProvider
+                    //                         .changeMapType(MapType.hybrid);
+                    //                     Navigator.pop(context);
+                    //                   },
+                    //                 ),
+                    //               ],
+                    //             ),
+                    //           ],
+                    //         ),
+                    //       ),
+                    //     );
+                    //   },
+                    // ),
                   ],
                 ),
               ),
-
-              // Zoom Controls
               Positioned(
                 bottom: 16,
                 right: 16,
@@ -108,8 +163,6 @@ class _GoogleMapsState extends State<MyGoogleMaps> {
                   ],
                 ),
               ),
-
-              // Placemark
               if (mapProvider.placemark != null)
                 Positioned(
                   bottom: 16,

@@ -11,12 +11,10 @@ import 'package:intermediate_flutter/provider/story_provider.dart';
 
 class AddStoryScreen extends StatefulWidget {
   final Function addStoryButtonOnPressed;
-  final Function showMapTypeSelection;
 
   const AddStoryScreen({
     super.key,
     required this.addStoryButtonOnPressed,
-    required this.showMapTypeSelection,
   });
 
   static const String routeName = '/add_story';
@@ -45,18 +43,19 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
         needChangeLanguageButton: true,
         changeLanguageButtonOnPressed: () {
           context.read<LocalizationProvider>().setLocale(
-                context.read<LocalizationProvider>().locale == const Locale('en')
+                context.read<LocalizationProvider>().locale ==
+                        const Locale('en')
                     ? const Locale('id')
                     : const Locale('en'),
-          );
+              );
         },
         needStoryWithLocationButton: true,
         storyWithLocationButtonOnPressed: () {
-          storyProvider.setStoryNeedLocation(!storyProvider.isStoryNeedLocation);
+          storyProvider
+              .setStoryNeedLocation(!storyProvider.isStoryNeedLocation);
         },
-        storyWithLocationButtonColor: storyProvider.isStoryNeedLocation
-            ? Colors.red
-            : Colors.white,
+        storyWithLocationButtonColor:
+            storyProvider.isStoryNeedLocation ? Colors.red : Colors.white,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -106,7 +105,7 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
               children: [
                 Expanded(
                   child: OutlinedButton.icon(
-                    icon: Icon(Icons.photo_library, 
+                    icon: Icon(Icons.photo_library,
                         color: theme.colorScheme.primary),
                     label: Text(AppLocalizations.of(context)!.gallery),
                     style: OutlinedButton.styleFrom(
@@ -140,36 +139,27 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
 
             // Location Toggle Section
             if (storyProvider.isStoryNeedLocation) ...[
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.surfaceVariant.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(Icons.location_on, 
-                            color: theme.colorScheme.primary),
-                        const SizedBox(width: 8),
-                        Text(
-                          AppLocalizations.of(context)!.locationLabel,
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(Icons.location_on, color: theme.colorScheme.primary),
+                      const SizedBox(width: 8),
+                      Text(
+                        AppLocalizations.of(context)!.locationLabel,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    SizedBox(
-                      height: 200,
-                      child: MyGoogleMaps(showMapTypeSelection: widget.showMapTypeSelection,),
-                    ),
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  const SizedBox(
+                    height: 300,
+                    child: MyGoogleMaps(),
+                  ),
+                ],
               ),
               const SizedBox(height: 24),
             ],

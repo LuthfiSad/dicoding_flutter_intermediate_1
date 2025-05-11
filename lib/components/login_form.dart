@@ -21,7 +21,6 @@ class LoginForm extends StatelessWidget {
       builder: (context, value, child) {
         return Column(
           children: [
-            // the Email field
             FormBuilderTextField(
               name: AppLocalizations.of(context)!.email,
               validator: FormBuilderValidators.compose([
@@ -37,7 +36,6 @@ class LoginForm extends StatelessWidget {
                 labelText: AppLocalizations.of(context)!.email,
               ),
             ),
-            // the password field
             FormBuilderTextField(
               name: AppLocalizations.of(context)!.password,
               validator: FormBuilderValidators.compose([

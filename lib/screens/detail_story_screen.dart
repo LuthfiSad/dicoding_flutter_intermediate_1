@@ -11,13 +11,11 @@ import 'dart:math' as math;
 
 class DetailStoryScreen extends StatefulWidget {
   final String storyId;
-  final Function showMapTypeSelection;
 
 
   const DetailStoryScreen({
     super.key,
     required this.storyId,
-    required this.showMapTypeSelection
   });
 
   @override
@@ -264,7 +262,7 @@ class _DetailStoryScreenState extends State<DetailStoryScreen>
                             ),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(12),
-                              child: MyGoogleMaps(showMapTypeSelection: widget.showMapTypeSelection,),
+                              child: const MyGoogleMaps(),
                             ),
                           ),
                         ],

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:intermediate_flutter/components/google_maps.dart';
 import 'package:intermediate_flutter/local/preferences.dart';
 import 'package:intermediate_flutter/localization/main.dart';
 import 'package:intermediate_flutter/model/page_configuration.dart';
@@ -70,7 +68,6 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
   String? networkStatus;
 
   bool showLogoutDialog = false;
-  bool showMapTypeDialog = false;
 
   List<Page> historyStack = [];
 
@@ -166,12 +163,6 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
           return true;
         }
 
-        if (showMapTypeDialog) {
-          showMapTypeDialog = false;
-          notifyListeners();
-          return true;
-        }
-
         selectedStoryId = null;
         isRegister = false;
         addStory = false;
@@ -184,7 +175,6 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
 
   void closeDialog() {
     showLogoutDialog = false;
-    showMapTypeDialog = false;
     notifyListeners();
   }
 
@@ -413,68 +403,11 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
               closeDialog();
             },
           ),
-        if (showMapTypeDialog)
-          MaterialPage(
-            key: const ValueKey('MapTypeDialogPage'),
-            child: AlertDialog(
-              title: Text(AppLocalizations.of(navigatorKey.currentContext!)!
-                  .selectedMapType),
-              content: Wrap(
-                spacing: 8,
-                children: [
-                  MapTypeButton(
-                    icon: Icons.map,
-                    label: 'Normal',
-                    type: MapType.normal,
-                    currentType: mapProvider.selectedMapType,
-                    onPressed: () {
-                      mapProvider.changeMapType(MapType.normal);
-                      closeDialog();
-                    },
-                  ),
-                  MapTypeButton(
-                    icon: Icons.satellite,
-                    label: 'Satellite',
-                    type: MapType.satellite,
-                    currentType: mapProvider.selectedMapType,
-                    onPressed: () {
-                      mapProvider.changeMapType(MapType.satellite);
-                      closeDialog();
-                    },
-                  ),
-                  MapTypeButton(
-                    icon: Icons.terrain,
-                    label: 'Terrain',
-                    type: MapType.terrain,
-                    currentType: mapProvider.selectedMapType,
-                    onPressed: () {
-                      mapProvider.changeMapType(MapType.terrain);
-                      closeDialog();
-                    },
-                  ),
-                  MapTypeButton(
-                    icon: Icons.layers,
-                    label: 'Hybrid',
-                    type: MapType.hybrid,
-                    currentType: mapProvider.selectedMapType,
-                    onPressed: () {
-                      mapProvider.changeMapType(MapType.hybrid);
-                      closeDialog();
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ),
         if (selectedStoryId != null)
           MaterialPage(
             key: const ValueKey('StoryDetailPage'),
             child: DetailStoryScreen(
               storyId: selectedStoryId!,
-              showMapTypeSelection: () {
-                showMapTypeDialog = true;
-                notifyListeners();
-              },
             ),
           ),
         if (addStory == true)
@@ -500,10 +433,6 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
                   addStoryError = false;
                   notifyListeners();
                 }
-              },
-              showMapTypeSelection: () {
-                showMapTypeDialog = true;
-                notifyListeners();
               },
             ),
           ),
