@@ -51,7 +51,14 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    _routeDelegate = MyRouteDelegate();
+    _routeDelegate = MyRouteDelegate(
+      authProvider: context.read<AuthProvider>(),
+      localizationProvider: context.read<LocalizationProvider>(),
+      connectivityProvider: context.read<ConnectivityProvider>(),
+      storyProvider:
+          context.read<StoryProvider>(), // Gunakan instance yang sama
+      mapProvider: context.read<MapProvider>(),
+    );
 
     myRouteInformationParser = MyRouteInformationParser();
   }

@@ -20,14 +20,25 @@ import 'package:intermediate_flutter/screens/unknown_screen.dart';
 class MyRouteDelegate extends RouterDelegate<PageConfiguration>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin {
   final GlobalKey<NavigatorState> _navigatorKey;
-  final AuthProvider authProvider = AuthProvider();
   final Preferences preferences = Preferences();
-  final LocalizationProvider localizationProvider = LocalizationProvider();
-  final ConnectivityProvider connectivityProvider = ConnectivityProvider();
-  final StoryProvider storyProvider = StoryProvider();
-  final MapProvider mapProvider = MapProvider();
+  final AuthProvider authProvider;
+  final LocalizationProvider localizationProvider;
+  final ConnectivityProvider connectivityProvider;
+  final StoryProvider storyProvider;
+  final MapProvider mapProvider;
+  // final AuthProvider authProvider = AuthProvider();
+  // final LocalizationProvider localizationProvider = LocalizationProvider();
+  // final ConnectivityProvider connectivityProvider = ConnectivityProvider();
+  // final StoryProvider storyProvider = StoryProvider();
+  // final MapProvider mapProvider = MapProvider();
 
-  MyRouteDelegate() : _navigatorKey = GlobalKey<NavigatorState>() {
+  MyRouteDelegate({
+    required this.authProvider,
+    required this.localizationProvider,
+    required this.connectivityProvider,
+    required this.storyProvider,
+    required this.mapProvider,
+  }) : _navigatorKey = GlobalKey<NavigatorState>() {
     _init();
   }
 
