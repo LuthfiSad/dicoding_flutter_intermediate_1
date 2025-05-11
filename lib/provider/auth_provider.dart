@@ -39,7 +39,6 @@ class AuthProvider extends ChangeNotifier {
     _isFetching = true;
     notifyListeners();
     var response = await _apiService.login(email, password);
-    // set user token
 
     if (response.error == false) {
       await _preferences.saveUser(response.loginResult);
@@ -77,7 +76,6 @@ class AuthProvider extends ChangeNotifier {
     } catch (e) {
       _isFetching = false;
       notifyListeners();
-      // throw alert error
       throw LogoutResponse.failure(e.toString());
     } finally {
       _isFetching = false;

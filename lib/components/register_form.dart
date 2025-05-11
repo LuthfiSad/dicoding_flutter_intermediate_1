@@ -35,7 +35,6 @@ class RegisterForm extends StatelessWidget {
                 labelText: AppLocalizations.of(context)!.name,
               ),
             ),
-            // the email field
             FormBuilderTextField(
               name: AppLocalizations.of(context)!.email,
               validator: FormBuilderValidators.compose([
@@ -51,7 +50,6 @@ class RegisterForm extends StatelessWidget {
                 labelText: AppLocalizations.of(context)!.email,
               ),
             ),
-            // the password field
             FormBuilderTextField(
               name: AppLocalizations.of(context)!.password,
               validator: FormBuilderValidators.compose([

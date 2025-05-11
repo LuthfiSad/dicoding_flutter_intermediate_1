@@ -11,10 +11,12 @@ import 'package:intermediate_flutter/provider/story_provider.dart';
 
 class AddStoryScreen extends StatefulWidget {
   final Function addStoryButtonOnPressed;
+  final Function showMapTypeSelection;
 
   const AddStoryScreen({
     super.key,
     required this.addStoryButtonOnPressed,
+    required this.showMapTypeSelection,
   });
 
   static const String routeName = '/add_story';
@@ -162,9 +164,9 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
                       ],
                     ),
                     const SizedBox(height: 16),
-                    const SizedBox(
+                    SizedBox(
                       height: 200,
-                      child: MyGoogleMaps(),
+                      child: MyGoogleMaps(showMapTypeSelection: widget.showMapTypeSelection,),
                     ),
                   ],
                 ),

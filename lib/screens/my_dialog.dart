@@ -7,10 +7,10 @@ class MyDialog extends Page {
   final String title;
   final String message;
   final Function() onOk;
-  final Function()? onCancel; // Optional callback for cancel/no action
-  final String? okText; // Customizable text for positive button
-  final String? cancelText; // Customizable text for negative button
-  final bool showTwoActions; // Flag to show one or two actions
+  final Function()? onCancel;
+  final String? okText;
+  final String? cancelText;
+  final bool showTwoActions;
 
   MyDialog({
     required this.title,

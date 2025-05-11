@@ -182,16 +182,6 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
     );
   }
 
-  void showLogoutConfirmation() {
-    showLogoutDialog = true;
-    notifyListeners();
-  }
-
-  void showMapTypeSelection() {
-    showMapTypeDialog = true;
-    notifyListeners();
-  }
-
   void closeDialog() {
     showLogoutDialog = false;
     showMapTypeDialog = false;
@@ -213,11 +203,6 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
           AppLocalizations.of(navigatorKey.currentContext!)!.logoutSuccess;
       isLoggedIn = false;
     }
-    notifyListeners();
-  }
-
-  void navigateToHome() {
-    isUnknown = false;
     notifyListeners();
   }
 
@@ -277,7 +262,10 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
         MaterialPage(
           key: const ValueKey('UnknownPage'),
           child: UnknownScreen(
-            backHome: () => navigateToHome(),
+            backHome: () {
+              isUnknown = false;
+              notifyListeners();
+            },
           ),
         ),
       ];
@@ -383,7 +371,8 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
           key: const ValueKey('StoryPage'),
           child: StoryScreen(
             logoutButtonOnPressed: () {
-              showLogoutConfirmation();
+              showLogoutDialog = true;
+              notifyListeners();
             },
             onTapped: (String id, response) async {
               if (response != null) {
@@ -482,6 +471,10 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
             key: const ValueKey('StoryDetailPage'),
             child: DetailStoryScreen(
               storyId: selectedStoryId!,
+              showMapTypeSelection: () {
+                showMapTypeDialog = true;
+                notifyListeners();
+              },
             ),
           ),
         if (addStory == true)
@@ -507,6 +500,10 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
                   addStoryError = false;
                   notifyListeners();
                 }
+              },
+              showMapTypeSelection: () {
+                showMapTypeDialog = true;
+                notifyListeners();
               },
             ),
           ),

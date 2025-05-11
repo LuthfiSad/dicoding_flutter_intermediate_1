@@ -21,13 +21,11 @@ class FunkyBouncyLoader extends CustomPainter {
     final radius = size.width / 6;
     final dotRadius = size.width / 12;
 
-    // Background circle (optional)
     final bgPaint = Paint()
       ..color = Colors.white.withOpacity(0.1)
       ..style = PaintingStyle.fill;
     canvas.drawCircle(center, radius * 1.2, bgPaint);
 
-    // Animated dots with bounce effect
     for (int i = 0; i < dotCount; i++) {
       final angle = 2 * math.pi * i / dotCount + progress * 2 * math.pi;
       final bounceHeight = math.sin(progress * 4 * math.pi + i) * 15;
@@ -37,7 +35,6 @@ class FunkyBouncyLoader extends CustomPainter {
         center.dy + radius * math.sin(angle) - bounceHeight,
       );
 
-      // Magic trail effect
       final trailPaint = Paint()
         ..color = dotColors[i].withOpacity(0.3)
         ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 10);
@@ -57,21 +54,18 @@ class FunkyBouncyLoader extends CustomPainter {
         }
       }
 
-      // Main dot
       final dotPaint = Paint()
         ..color = dotColors[i]
         ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 5);
       
       canvas.drawCircle(dotPos, dotRadius, dotPaint);
 
-      // Inner glow
       final innerPaint = Paint()
         ..color = Colors.white
         ..style = PaintingStyle.fill;
       canvas.drawCircle(dotPos, dotRadius * 0.5, innerPaint);
     }
 
-    // Optional: Central text (uncomment if needed)
     final textPainter = TextPainter(
       text: const TextSpan(
         text: 'Loading...',

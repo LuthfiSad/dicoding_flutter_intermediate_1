@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:intermediate_flutter/routes/router_delegate.dart';
 import 'package:provider/provider.dart';
 import 'package:intermediate_flutter/components/placemark.dart';
 import 'package:intermediate_flutter/provider/map_provider.dart';
 
 class MyGoogleMaps extends StatefulWidget {
-  const MyGoogleMaps({super.key});
+  final Function showMapTypeSelection;
+  const MyGoogleMaps({super.key, required this.showMapTypeSelection});
 
   @override
   State<MyGoogleMaps> createState() => _GoogleMapsState();
@@ -67,19 +67,15 @@ class _GoogleMapsState extends State<MyGoogleMaps> {
                     ),
                     const SizedBox(height: 8),
                     // Map Type Button
-                    Consumer<MyRouteDelegate>(
-                      builder: (context, routeDelegate, child) {
-                        return FloatingActionButton(
+                    FloatingActionButton(
                           heroTag: 'map-type',
                           backgroundColor: theme.colorScheme.primary,
                           child: Icon(Icons.layers,
                               color: theme.colorScheme.onPrimary),
                           onPressed: () {
-                            routeDelegate.showMapTypeSelection();
+                            widget.showMapTypeSelection();
                           },
-                        );
-                      },
-                    )
+                        )
                   ],
                 ),
               ),

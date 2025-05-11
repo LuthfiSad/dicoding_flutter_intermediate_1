@@ -26,7 +26,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   });
 
   @override
-  Size get preferredSize => const Size.fromHeight(60); // Slightly taller
+  Size get preferredSize => const Size.fromHeight(60);
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +48,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       child: AppBar(
         backgroundColor: Colors.transparent,
-        elevation: 0, // Remove default shadow
+        elevation: 0,
         title: Text(
           title,
           style: const TextStyle(
@@ -58,7 +58,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ),
         iconTheme: const IconThemeData(
-          color: Colors.white, // Ganti ke warna yang kamu mau
+          color: Colors.white,
         ),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(

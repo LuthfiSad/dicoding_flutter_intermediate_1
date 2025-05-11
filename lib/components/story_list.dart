@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intermediate_flutter/components/funky_bouncy_loader.dart';
 import 'package:provider/provider.dart';
-// import 'package:intermediate_flutter/components/custom_loading.dart';
 import 'package:intermediate_flutter/components/story_card.dart';
 import 'package:intermediate_flutter/model/story.dart';
 import 'package:intermediate_flutter/provider/map_provider.dart';

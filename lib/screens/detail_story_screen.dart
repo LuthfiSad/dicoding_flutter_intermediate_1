@@ -11,10 +11,13 @@ import 'dart:math' as math;
 
 class DetailStoryScreen extends StatefulWidget {
   final String storyId;
+  final Function showMapTypeSelection;
+
 
   const DetailStoryScreen({
     super.key,
     required this.storyId,
+    required this.showMapTypeSelection
   });
 
   @override
@@ -121,7 +124,7 @@ class _DetailStoryScreenState extends State<DetailStoryScreen>
                           },
                           errorBuilder: (context, error, stackTrace) {
                             return Container(
-                              color: theme.colorScheme.surfaceContainerHighest,
+                              color: theme.colorScheme.surfaceVariant,
                               child: Center(
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -261,7 +264,7 @@ class _DetailStoryScreenState extends State<DetailStoryScreen>
                             ),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(12),
-                              child: const MyGoogleMaps(),
+                              child: MyGoogleMaps(showMapTypeSelection: widget.showMapTypeSelection,),
                             ),
                           ),
                         ],

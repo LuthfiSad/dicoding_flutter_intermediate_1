@@ -38,7 +38,6 @@ class StoryCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Image with gradient overlay
             Stack(
               children: [
                 SizedBox(
@@ -122,7 +121,6 @@ class StoryCard extends StatelessWidget {
               ],
             ),
             
-            // Content
             Padding(
               padding: const EdgeInsets.all(12),
               child: Column(

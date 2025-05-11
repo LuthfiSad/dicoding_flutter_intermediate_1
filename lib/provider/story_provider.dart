@@ -13,7 +13,7 @@ class StoryProvider extends ChangeNotifier {
   final List<Story> _stories = [];
   late DetailStory _detailStory;
   int? pageItems = 1;
-  int sizeItems = 12;
+  int sizeItems = 10;
   XFile? _image;
   String? _imagePath;
   bool _isLoggingIn = false;
