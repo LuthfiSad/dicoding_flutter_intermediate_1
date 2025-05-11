@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intermediate_flutter/components/funky_bouncy_loader.dart';
+import 'package:intermediate_flutter/flavor_config.dart';
 import 'package:provider/provider.dart';
-import 'package:intermediate_flutter/components/custom_loading.dart';
 import 'package:intermediate_flutter/components/story_card.dart';
 import 'package:intermediate_flutter/model/story.dart';
 import 'package:intermediate_flutter/provider/map_provider.dart';
@@ -12,9 +13,9 @@ class StoryList extends StatefulWidget {
   final Function onTapped;
 
   const StoryList({
-    Key? key,
+    super.key,
     required this.onTapped,
-  }) : super(key: key);
+  });
 
   @override
   State<StoryList> createState() => _StoryListState();
@@ -44,13 +45,9 @@ class _StoryListState extends State<StoryList> with TickerProviderStateMixin {
 
     loaderController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1000),
-    );
-    loaderAnimation = Tween(begin: 1.0, end: 1.4).animate(CurvedAnimation(
-      parent: loaderController,
-      curve: Curves.easeIn,
-    ));
-    loaderController.repeat(reverse: true);
+      duration: const Duration(milliseconds: 2000),
+    )..repeat();
+    loaderAnimation = Tween(begin: 0.0, end: 1.0).animate(loaderController);
   }
 
   @override
@@ -75,8 +72,13 @@ class _StoryListState extends State<StoryList> with TickerProviderStateMixin {
                       ? (math.pi * 2) * loaderController.value
                       : -(math.pi * 2) * loaderController.value,
                   child: CustomPaint(
-                    foregroundPainter: LoaderAnimation(
-                      radiusRatio: loaderAnimation.value,
+                    painter: FunkyBouncyLoader(
+                      progress: loaderAnimation.value,
+                      dotColors: [
+                        Theme.of(context).colorScheme.primary,
+                        Theme.of(context).colorScheme.secondary,
+                        Theme.of(context).colorScheme.error,
+                      ],
                     ),
                     size: const Size(300, 300),
                   ),
@@ -118,7 +120,7 @@ class _StoryListState extends State<StoryList> with TickerProviderStateMixin {
                     context.read<StoryProvider>().setIsFetching(true);
                     context.read<MapProvider>().clearMarkerAndPlacemark();
                     context.read<StoryProvider>().getDetailStories(story.id);
-                    if (story.lat != null && story.lon != null) {
+                    if (story.lat != null && story.lon != null && FlavorConfig.isPaidVersion) {
                       var userLatLng = LatLng(
                         story.lat ?? 0,
                         story.lon ?? 0,

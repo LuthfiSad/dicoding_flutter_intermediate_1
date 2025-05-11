@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:intermediate_flutter/database/db.dart';
-import 'package:intermediate_flutter/database/preferences.dart';
+import 'package:intermediate_flutter/flavor_config.dart';
+import 'package:intermediate_flutter/local/preferences.dart';
 import 'package:intermediate_flutter/localization/main.dart';
 import 'package:intermediate_flutter/model/page_configuration.dart';
 import 'package:intermediate_flutter/provider/auth_provider.dart';
@@ -20,29 +20,47 @@ import 'package:intermediate_flutter/screens/unknown_screen.dart';
 class MyRouteDelegate extends RouterDelegate<PageConfiguration>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin {
   final GlobalKey<NavigatorState> _navigatorKey;
-  final DatabaseRepository database;
-  final AuthProvider authProvider = AuthProvider();
   final Preferences preferences = Preferences();
-  final LocalizationProvider localizationProvider = LocalizationProvider();
-  final ConnectivityProvider connectivityProvider = ConnectivityProvider();
-  final StoryProvider storyProvider = StoryProvider();
-  final MapProvider mapProvider = MapProvider();
+  final AuthProvider authProvider;
+  final LocalizationProvider localizationProvider;
+  final ConnectivityProvider connectivityProvider;
+  final StoryProvider storyProvider;
+  final MapProvider mapProvider;
+  // final AuthProvider authProvider = AuthProvider();
+  // final LocalizationProvider localizationProvider = LocalizationProvider();
+  // final ConnectivityProvider connectivityProvider = ConnectivityProvider();
+  // final StoryProvider storyProvider = StoryProvider();
+  // final MapProvider mapProvider = MapProvider();
 
-  MyRouteDelegate(
-    this.database,
-  ) : _navigatorKey = GlobalKey<NavigatorState>() {
+  MyRouteDelegate({
+    required this.authProvider,
+    required this.localizationProvider,
+    required this.connectivityProvider,
+    required this.storyProvider,
+    required this.mapProvider,
+  }) : _navigatorKey = GlobalKey<NavigatorState>() {
     _init();
   }
 
   void _init() async {
     isLoggedIn = await preferences.getUserToken() != null;
+
+    await Future.delayed(const Duration(seconds: 2));
+
     await connectivityProvider.initConnectivity();
     var connectionStatus = connectivityProvider.connectionStatus.toString();
+
     if (connectionStatus == 'ConnectivityResult.none') {
-      networkStatus = AppLocalizations.of(navigatorKey.currentContext!)!
-          .networkErrorMessage;
-      noConnection = true;
-      notifyListeners();
+      await Future.delayed(const Duration(milliseconds: 500));
+      await connectivityProvider.initConnectivity();
+      connectionStatus = connectivityProvider.connectionStatus.toString();
+
+      if (connectionStatus == 'ConnectivityResult.none') {
+        networkStatus = AppLocalizations.of(navigatorKey.currentContext!)!
+            .networkErrorMessage;
+        noConnection = true;
+        notifyListeners();
+      }
     }
     notifyListeners();
   }
@@ -60,7 +78,9 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
   String? notificationTitle;
   String? notificationMessage;
   String? networkStatus;
-  String? locationStatus;
+
+  bool showLogoutDialog = false;
+  bool isPaidVersionDialog = false;
 
   List<Page> historyStack = [];
 
@@ -99,12 +119,9 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
           return true;
         }
 
-        if (notificationMessage != null &&
-            notificationTitle != null &&
-            locationStatus != null) {
+        if (notificationMessage != null && notificationTitle != null) {
           notificationMessage = null;
           notificationTitle = null;
-          locationStatus = null;
           notifyListeners();
           return true;
         }
@@ -153,6 +170,12 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
           return true;
         }
 
+        if (showLogoutDialog) {
+          showLogoutDialog = false;
+          notifyListeners();
+          return true;
+        }
+
         selectedStoryId = null;
         isRegister = false;
         addStory = false;
@@ -163,9 +186,47 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
     );
   }
 
+  void closeDialog() {
+    showLogoutDialog = false;
+    notifyListeners();
+  }
+
+  void performLogout() async {
+    showLogoutDialog = false;
+
+    var response = await authProvider.logout();
+    if (response.error == true) {
+      notificationTitle =
+          AppLocalizations.of(navigatorKey.currentContext!)!.logoutFailed;
+      notificationMessage = response.message;
+    } else if (response.error == false) {
+      notificationTitle =
+          AppLocalizations.of(navigatorKey.currentContext!)!.success;
+      notificationMessage =
+          AppLocalizations.of(navigatorKey.currentContext!)!.logoutSuccess;
+      isLoggedIn = false;
+    }
+    notifyListeners();
+  }
+
+  void showDialogPermissionVersion() {
+    if (FlavorConfig.isPaidVersion) {
+      storyProvider.setStoryNeedLocation(!storyProvider.isStoryNeedLocation);
+    } else {
+      isPaidVersionDialog = true;
+      notificationTitle =
+          AppLocalizations.of(navigatorKey.currentContext!)!.paidVersionTitle;
+      notificationMessage =
+          AppLocalizations.of(navigatorKey.currentContext!)!.paidVersionDesc;
+    }
+    notifyListeners();
+  }
+
   @override
   PageConfiguration? get currentConfiguration {
     if (isLoggedIn == null) {
+      return PageConfiguration.splash();
+    } else if (isLoggedIn == null) {
       return PageConfiguration.splash();
     } else if (isRegister == true) {
       return PageConfiguration.register();
@@ -213,10 +274,15 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
     notifyListeners();
   }
 
-  List<Page> get _unknownStack => const [
+  List<Page> get _unknownStack => [
         MaterialPage(
-          key: ValueKey('UnknownPage'),
-          child: UnknownScreen(),
+          key: const ValueKey('UnknownPage'),
+          child: UnknownScreen(
+            backHome: () {
+              isUnknown = false;
+              notifyListeners();
+            },
+          ),
         ),
       ];
 
@@ -309,6 +375,8 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
             onOk: () {
               notificationMessage = null;
               notificationTitle = null;
+              noConnection = false;
+              networkStatus = null;
               notifyListeners();
             },
           ),
@@ -318,24 +386,8 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
         MaterialPage(
           key: const ValueKey('StoryPage'),
           child: StoryScreen(
-            logoutButtonOnPressed: () async {
-              var response = await authProvider.logout();
-              if (response.error == true) {
-                notificationTitle =
-                    AppLocalizations.of(navigatorKey.currentContext!)!
-                        .logoutFailed;
-                notificationMessage = response.message;
-                locationStatus = response.message;
-                notifyListeners();
-                return;
-              } else if (response.error == false) {
-                notificationTitle =
-                    AppLocalizations.of(navigatorKey.currentContext!)!.success;
-                notificationMessage =
-                    AppLocalizations.of(navigatorKey.currentContext!)!
-                        .logoutSuccess;
-              }
-              isLoggedIn = false;
+            logoutButtonOnPressed: () {
+              showLogoutDialog = true;
               notifyListeners();
             },
             onTapped: (String id, response) async {
@@ -361,8 +413,23 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
               addStory = true;
               notifyListeners();
             },
+            showDialogPermissionVersion: showDialogPermissionVersion,
           ),
         ),
+        if (showLogoutDialog)
+          MyDialog(
+            title: AppLocalizations.of(navigatorKey.currentContext!)!
+                .confirmLogout,
+            message: AppLocalizations.of(navigatorKey.currentContext!)!
+                .logoutConfirmMessage,
+            showTwoActions: true,
+            onOk: () {
+              performLogout();
+            },
+            onCancel: () {
+              closeDialog();
+            },
+          ),
         if (selectedStoryId != null)
           MaterialPage(
             key: const ValueKey('StoryDetailPage'),
@@ -394,6 +461,7 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
                   notifyListeners();
                 }
               },
+              showDialogPermissionVersion: showDialogPermissionVersion,
             ),
           ),
         if (notificationTitle != null && notificationMessage != null)
@@ -403,7 +471,9 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
             onOk: () {
               notificationMessage = null;
               notificationTitle = null;
-              if (addStoryError != true) {
+              if (isPaidVersionDialog) {
+                isPaidVersionDialog = false;
+              } else if (addStoryError != true) {
                 addStory = false;
               }
               notifyListeners();
@@ -418,6 +488,8 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
             onOk: () {
               notificationMessage = null;
               notificationTitle = null;
+              noConnection = false;
+              networkStatus = null;
               notifyListeners();
             },
           ),

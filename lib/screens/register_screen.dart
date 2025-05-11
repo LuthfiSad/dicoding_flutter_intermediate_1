@@ -10,10 +10,10 @@ class RegisterScreen extends StatefulWidget {
   final Function(String name, String email, String password) onRegister;
 
   const RegisterScreen({
-    Key? key,
+    super.key,
     required this.onLogin,
     required this.onRegister,
-  }) : super(key: key);
+  });
 
   static const String routeName = '/register';
 
@@ -37,136 +37,74 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final size = MediaQuery.of(context).size;
+
     return Consumer2<AuthProvider, LocalizationProvider>(
-      builder: (context, value, localizationProvider, child) {
-        return OrientationBuilder(
-          builder: (context, orientation) {
-            if (orientation == Orientation.landscape) {
-              return Scaffold(
-                floatingActionButton: FloatingActionButton(
-                  onPressed: () {
-                    localizationProvider.setLocale(
-                      localizationProvider.locale == const Locale('en')
-                          ? const Locale('id')
-                          : const Locale('en'),
-                    );
-                  },
-                  child: const Icon(Icons.translate),
-                ),
-                body: Center(
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      left: MediaQuery.of(context).size.width * 0.15,
-                      right: MediaQuery.of(context).size.width * 0.15,
-                    ),
-                    child: SingleChildScrollView(
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                          top: MediaQuery.of(context).size.height * 0.1,
-                          bottom: MediaQuery.of(context).size.height * 0.1,
-                        ),
-                        child: Column(
-                          // the children should be aligned to the center
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            // the title
-                            const Text(
-                              'Register',
-                              style: TextStyle(
-                                fontSize: 32.0,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 20.0),
-                            Form(
-                              key: formKey,
-                              child: RegisterForm(
-                                nameController: _nameController,
-                                emailController: _emailController,
-                                passwordController: _passwordController,
-                              ),
-                            ),
-                            const SizedBox(height: 20.0),
-                            // the register button
-                            value.isFetching
-                                ? const CircularProgressIndicator()
-                                : SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.7,
-                                    child: ElevatedButton(
-                                      onPressed: () async {
-                                        if (formKey.currentState!.validate()) {
-                                          value.setIsFetching(true);
-                                          await widget.onRegister(
-                                            _nameController.text,
-                                            _emailController.text,
-                                            _passwordController.text,
-                                          );
-                                        }
-                                      },
-                                      child: Text(
-                                        AppLocalizations.of(context)!.register,
-                                      ),
-                                    ),
-                                  ),
-                            const SizedBox(height: 20.0),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  AppLocalizations.of(context)!.haveAccount,
-                                ),
-                                SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.2,
-                                  child: TextButton(
-                                    onPressed: () => widget.onLogin(),
-                                    child: Text(
-                                      AppLocalizations.of(context)!.login,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+      builder: (context, authProvider, localizationProvider, child) {
+        return Scaffold(
+          floatingActionButton: FloatingActionButton(
+            backgroundColor: theme.colorScheme.secondary,
+            onPressed: () {
+              localizationProvider.setLocale(
+                localizationProvider.locale == const Locale('en')
+                    ? const Locale('id')
+                    : const Locale('en'),
               );
-            } else {
-              return Scaffold(
-                floatingActionButton: FloatingActionButton(
-                  onPressed: () {
-                    localizationProvider.setLocale(
-                      localizationProvider.locale == const Locale('en')
-                          ? const Locale('id')
-                          : const Locale('en'),
-                    );
-                  },
-                  child: const Icon(Icons.translate),
-                ),
-                body: Center(
+            },
+            child: Icon(Icons.translate, color: theme.colorScheme.onSecondary),
+          ),
+          body: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  theme.colorScheme.primary.withOpacity(0.8),
+                  theme.colorScheme.primaryContainer,
+                ],
+              ),
+            ),
+            child: Center(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(24.0),
+                child: Card(
+                  elevation: 8,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
                   child: Padding(
-                    padding: EdgeInsets.only(
-                      left: MediaQuery.of(context).size.width * 0.15,
-                      right: MediaQuery.of(context).size.width * 0.15,
-                    ),
-                    child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(24.0),
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxWidth: size.width > 600 ? 500 : double.infinity,
+                      ),
                       child: Column(
-                        // the children should be aligned to the center
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          // the title
-                          const Text(
-                            'Register',
-                            style: TextStyle(
-                              fontSize: 32.0,
+                          // App Logo/Title
+                          Icon(
+                            Icons.person_add,
+                            size: 80,
+                            color: theme.colorScheme.primary,
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            AppLocalizations.of(context)!.register,
+                            style: theme.textTheme.headlineSmall?.copyWith(
                               fontWeight: FontWeight.bold,
+                              color: theme.colorScheme.onSurface,
                             ),
                           ),
-                          const SizedBox(height: 20.0),
+                          Text(
+                            AppLocalizations.of(context)!.registerDesc,
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: theme.colorScheme.onSurface.withOpacity(0.7),
+                            ),
+                          ),
+                          const SizedBox(height: 32),
+
+                          // Registration Form
                           Form(
                             key: formKey,
                             child: RegisterForm(
@@ -175,17 +113,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               passwordController: _passwordController,
                             ),
                           ),
-                          const SizedBox(height: 20.0),
-                          // the register button
-                          value.isFetching
+                          const SizedBox(height: 24),
+
+                          // Register Button
+                          authProvider.isFetching
                               ? const CircularProgressIndicator()
                               : SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.7,
+                                  width: double.infinity,
                                   child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(vertical: 16),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      backgroundColor: theme.colorScheme.primary,
+                                    ),
                                     onPressed: () async {
                                       if (formKey.currentState!.validate()) {
-                                        value.setIsFetching(true);
+                                        authProvider.setIsFetching(true);
                                         await widget.onRegister(
                                           _nameController.text,
                                           _emailController.text,
@@ -195,35 +140,69 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     },
                                     child: Text(
                                       AppLocalizations.of(context)!.register,
+                                      style: TextStyle(
+                                        color: theme.colorScheme.onPrimary,
+                                        fontSize: 16,
+                                      ),
                                     ),
                                   ),
                                 ),
-                          const SizedBox(height: 20.0),
+                          const SizedBox(height: 24),
+
+                          // Divider
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Divider(
+                                  color: theme.colorScheme.onSurface.withOpacity(0.2),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 8),
+                                child: Text(
+                                  AppLocalizations.of(context)!.or,
+                                  style: TextStyle(
+                                    color: theme.colorScheme.onSurface.withOpacity(0.5),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Divider(
+                                  color: theme.colorScheme.onSurface.withOpacity(0.2),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+
+                          // Login Prompt
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
                                 AppLocalizations.of(context)!.haveAccount,
+                                style: theme.textTheme.bodyMedium,
                               ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.2,
-                                child: TextButton(
-                                  onPressed: () => widget.onLogin(),
-                                  child: Text(
-                                    AppLocalizations.of(context)!.login,
-                                  ),
+                              TextButton(
+                                onPressed: () => widget.onLogin(),
+                                style: TextButton.styleFrom(
+                                  foregroundColor: theme.colorScheme.primary,
+                                ),
+                                child: Text(
+                                  AppLocalizations.of(context)!.login,
+                                  style: const TextStyle(fontWeight: FontWeight.bold),
                                 ),
                               ),
                             ],
-                          )
+                          ),
                         ],
                       ),
                     ),
                   ),
                 ),
-              );
-            }
-          },
+              ),
+            ),
+          ),
         );
       },
     );

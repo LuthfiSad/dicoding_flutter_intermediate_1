@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intermediate_flutter/api/api_service.dart';
-import 'package:intermediate_flutter/database/preferences.dart';
+import 'package:intermediate_flutter/local/preferences.dart';
 import 'package:intermediate_flutter/model/response/login_response.dart';
 import 'package:intermediate_flutter/model/response/login_result.dart';
 import 'package:intermediate_flutter/model/response/logout_response.dart';
@@ -39,7 +39,6 @@ class AuthProvider extends ChangeNotifier {
     _isFetching = true;
     notifyListeners();
     var response = await _apiService.login(email, password);
-    // set user token
 
     if (response.error == false) {
       await _preferences.saveUser(response.loginResult);
@@ -77,7 +76,6 @@ class AuthProvider extends ChangeNotifier {
     } catch (e) {
       _isFetching = false;
       notifyListeners();
-      // throw alert error
       throw LogoutResponse.failure(e.toString());
     } finally {
       _isFetching = false;

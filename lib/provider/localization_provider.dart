@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intermediate_flutter/database/preferences.dart';
+import 'package:intermediate_flutter/local/preferences.dart';
 
 class LocalizationProvider extends ChangeNotifier {
   final Preferences _preferences = Preferences();

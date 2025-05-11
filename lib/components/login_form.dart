@@ -10,10 +10,10 @@ class LoginForm extends StatelessWidget {
   final TextEditingController passwordController;
 
   const LoginForm({
-    Key? key,
+    super.key,
     required this.emailController,
     required this.passwordController,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,6 @@ class LoginForm extends StatelessWidget {
       builder: (context, value, child) {
         return Column(
           children: [
-            // the Email field
             FormBuilderTextField(
               name: AppLocalizations.of(context)!.email,
               validator: FormBuilderValidators.compose([
@@ -37,7 +36,6 @@ class LoginForm extends StatelessWidget {
                 labelText: AppLocalizations.of(context)!.email,
               ),
             ),
-            // the password field
             FormBuilderTextField(
               name: AppLocalizations.of(context)!.password,
               validator: FormBuilderValidators.compose([

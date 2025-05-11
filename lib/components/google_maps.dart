@@ -5,7 +5,7 @@ import 'package:intermediate_flutter/components/placemark.dart';
 import 'package:intermediate_flutter/provider/map_provider.dart';
 
 class MyGoogleMaps extends StatefulWidget {
-  const MyGoogleMaps({Key? key}) : super(key: key);
+  const MyGoogleMaps({super.key});
 
   @override
   State<MyGoogleMaps> createState() => _GoogleMapsState();
@@ -22,6 +22,8 @@ class _GoogleMapsState extends State<MyGoogleMaps> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Consumer<MapProvider>(
       builder: (context, mapProvider, child) {
         return Scaffold(
@@ -45,84 +47,127 @@ class _GoogleMapsState extends State<MyGoogleMaps> {
                   mapController = controller;
                 },
               ),
-              // get my location
               Positioned(
                 top: 16,
                 right: 16,
-                child: FloatingActionButton(
-                  child: const Icon(Icons.my_location),
-                  onPressed: () {
-                    mapProvider.onGetMyLocation(mapController);
-                  },
+                child: Column(
+                  children: [
+                    FloatingActionButton(
+                      heroTag: 'my-location',
+                      backgroundColor: theme.colorScheme.primary,
+                      child: Icon(Icons.my_location,
+                          color: theme.colorScheme.onPrimary),
+                      onPressed: () {
+                        mapProvider.onGetMyLocation(mapController);
+                      },
+                    ),
+                    const SizedBox(height: 8),
+                    // FloatingActionButton(
+                    //   heroTag: 'map-type',
+                    //   backgroundColor: theme.colorScheme.primary,
+                    //   child: Icon(Icons.layers,
+                    //       color: theme.colorScheme.onPrimary),
+                    //   onPressed: () {
+                    //     showModalBottomSheet(
+                    //       context: context,
+                    //       builder: (context) => Container(
+                    //         padding: const EdgeInsets.all(16),
+                    //         child: Column(
+                    //           mainAxisSize: MainAxisSize.min,
+                    //           children: [
+                    //             Text('Select Map Type',
+                    //                 style: theme.textTheme.titleMedium),
+                    //             const SizedBox(height: 16),
+                    //             Wrap(
+                    //               spacing: 8,
+                    //               children: [
+                    //                 MapTypeButton(
+                    //                   icon: Icons.map,
+                    //                   label: 'Normal',
+                    //                   type: MapType.normal,
+                    //                   currentType: mapProvider.selectedMapType,
+                    //                   onPressed: () {
+                    //                     mapProvider
+                    //                         .changeMapType(MapType.normal);
+                    //                     Navigator.pop(context);
+                    //                   },
+                    //                 ),
+                    //                 MapTypeButton(
+                    //                   icon: Icons.satellite,
+                    //                   label: 'Satellite',
+                    //                   type: MapType.satellite,
+                    //                   currentType: mapProvider.selectedMapType,
+                    //                   onPressed: () {
+                    //                     mapProvider
+                    //                         .changeMapType(MapType.satellite);
+                    //                     Navigator.pop(context);
+                    //                   },
+                    //                 ),
+                    //                 MapTypeButton(
+                    //                   icon: Icons.terrain,
+                    //                   label: 'Terrain',
+                    //                   type: MapType.terrain,
+                    //                   currentType: mapProvider.selectedMapType,
+                    //                   onPressed: () {
+                    //                     mapProvider
+                    //                         .changeMapType(MapType.terrain);
+                    //                     Navigator.pop(context);
+                    //                   },
+                    //                 ),
+                    //                 MapTypeButton(
+                    //                   icon: Icons.layers,
+                    //                   label: 'Hybrid',
+                    //                   type: MapType.hybrid,
+                    //                   currentType: mapProvider.selectedMapType,
+                    //                   onPressed: () {
+                    //                     mapProvider
+                    //                         .changeMapType(MapType.hybrid);
+                    //                     Navigator.pop(context);
+                    //                   },
+                    //                 ),
+                    //               ],
+                    //             ),
+                    //           ],
+                    //         ),
+                    //       ),
+                    //     );
+                    //   },
+                    // ),
+                  ],
                 ),
               ),
-              // zoom in
-              Positioned(
-                bottom: 60,
-                right: 5,
-                child: FloatingActionButton.small(
-                  heroTag: 'zoom-in',
-                  child: const Icon(Icons.add),
-                  onPressed: () {
-                    mapController.animateCamera(
-                      CameraUpdate.zoomIn(),
-                    );
-                  },
-                ),
-              ),
-              // zoom out
               Positioned(
                 bottom: 16,
-                right: 5,
-                child: FloatingActionButton.small(
-                  heroTag: 'zoom-out',
-                  child: const Icon(Icons.remove),
-                  onPressed: () {
-                    mapController.animateCamera(
-                      CameraUpdate.zoomOut(),
-                    );
-                  },
+                right: 16,
+                child: Column(
+                  children: [
+                    FloatingActionButton.small(
+                      heroTag: 'zoom-in',
+                      backgroundColor: theme.colorScheme.primary,
+                      child:
+                          Icon(Icons.add, color: theme.colorScheme.onPrimary),
+                      onPressed: () {
+                        mapController.animateCamera(CameraUpdate.zoomIn());
+                      },
+                    ),
+                    const SizedBox(height: 8),
+                    FloatingActionButton.small(
+                      heroTag: 'zoom-out',
+                      backgroundColor: theme.colorScheme.primary,
+                      child: Icon(Icons.remove,
+                          color: theme.colorScheme.onPrimary),
+                      onPressed: () {
+                        mapController.animateCamera(CameraUpdate.zoomOut());
+                      },
+                    ),
+                  ],
                 ),
               ),
-              // map type
-              Positioned(
-                top: 16,
-                right: 80,
-                child: FloatingActionButton.small(
-                  onPressed: null,
-                  child: PopupMenuButton<MapType>(
-                    icon: const Icon(Icons.map),
-                    onSelected: (value) {
-                      mapProvider.changeMapType(value);
-                    },
-                    itemBuilder: (context) => [
-                      const PopupMenuItem(
-                        value: MapType.normal,
-                        child: Text("Normal"),
-                      ),
-                      const PopupMenuItem(
-                        value: MapType.satellite,
-                        child: Text("Satellite"),
-                      ),
-                      const PopupMenuItem(
-                        value: MapType.terrain,
-                        child: Text("Terrain"),
-                      ),
-                      const PopupMenuItem(
-                        value: MapType.hybrid,
-                        child: Text("Hybrid"),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              if (mapProvider.placemark == null)
-                const SizedBox()
-              else
+              if (mapProvider.placemark != null)
                 Positioned(
                   bottom: 16,
-                  right: 60,
                   left: 16,
+                  right: 80,
                   child: Placemark(
                     placemark: mapProvider.placemark!,
                   ),
@@ -131,6 +176,34 @@ class _GoogleMapsState extends State<MyGoogleMaps> {
           ),
         );
       },
+    );
+  }
+}
+
+class MapTypeButton extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final MapType type;
+  final MapType currentType;
+  final VoidCallback onPressed;
+
+  const MapTypeButton({
+    super.key,
+    required this.icon,
+    required this.label,
+    required this.type,
+    required this.currentType,
+    required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isSelected = type == currentType;
+    return ChoiceChip(
+      avatar: Icon(icon, size: 18),
+      label: Text(label),
+      selected: isSelected,
+      onSelected: (_) => onPressed(),
     );
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intermediate_flutter/api/api_service.dart';
-import 'package:intermediate_flutter/database/preferences.dart';
+import 'package:intermediate_flutter/local/preferences.dart';
 import 'package:intermediate_flutter/model/detail_story.dart';
 import 'package:intermediate_flutter/model/response/add_new_story_response.dart';
 import 'package:intermediate_flutter/model/story.dart';
@@ -13,7 +13,7 @@ class StoryProvider extends ChangeNotifier {
   final List<Story> _stories = [];
   late DetailStory _detailStory;
   int? pageItems = 1;
-  int sizeItems = 12;
+  int sizeItems = 10;
   XFile? _image;
   String? _imagePath;
   bool _isLoggingIn = false;

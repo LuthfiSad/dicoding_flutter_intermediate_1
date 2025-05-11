@@ -11,11 +11,11 @@ class RegisterForm extends StatelessWidget {
   final TextEditingController passwordController;
 
   const RegisterForm({
-    Key? key,
+    super.key,
     required this.nameController,
     required this.emailController,
     required this.passwordController,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,6 @@ class RegisterForm extends StatelessWidget {
                 labelText: AppLocalizations.of(context)!.name,
               ),
             ),
-            // the email field
             FormBuilderTextField(
               name: AppLocalizations.of(context)!.email,
               validator: FormBuilderValidators.compose([
@@ -51,7 +50,6 @@ class RegisterForm extends StatelessWidget {
                 labelText: AppLocalizations.of(context)!.email,
               ),
             ),
-            // the password field
             FormBuilderTextField(
               name: AppLocalizations.of(context)!.password,
               validator: FormBuilderValidators.compose([

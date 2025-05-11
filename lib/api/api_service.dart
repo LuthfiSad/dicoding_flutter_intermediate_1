@@ -134,6 +134,7 @@ class ApiService {
     int sizeItem,
     int needLocation,
   ) async {
+    print("needLocation $needLocation");
     var url =
         '$baseUrl/stories?page=$pageItems&size=$sizeItem&location=$needLocation';
     var headers = {

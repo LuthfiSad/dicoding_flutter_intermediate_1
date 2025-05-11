@@ -23,7 +23,6 @@ class ErrorResponse {
     return message;
   }
 
-  // get error status
   bool getErrorStatus() {
     return error;
   }
