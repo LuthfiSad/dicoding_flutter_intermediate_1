@@ -56,5 +56,7 @@
   "changeLanguage": "Ganti Bahasa",
   "withLocation": "Dengan Lokasi",
   "onlyStory": "Cerita",
-  "selectedMapType": "Pilih Tipe Peta"
+  "selectedMapType": "Pilih Tipe Peta",
+  "paidVersionTitle": "Halaman ini hanya tersedia dalam versi premium",
+  "paidVersionDesc": "Untuk mengakses halaman ini, Anda harus membeli versi premium"
 }

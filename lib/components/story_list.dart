@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intermediate_flutter/components/funky_bouncy_loader.dart';
+import 'package:intermediate_flutter/flavor_config.dart';
 import 'package:provider/provider.dart';
 import 'package:intermediate_flutter/components/story_card.dart';
 import 'package:intermediate_flutter/model/story.dart';
@@ -119,7 +120,7 @@ class _StoryListState extends State<StoryList> with TickerProviderStateMixin {
                     context.read<StoryProvider>().setIsFetching(true);
                     context.read<MapProvider>().clearMarkerAndPlacemark();
                     context.read<StoryProvider>().getDetailStories(story.id);
-                    if (story.lat != null && story.lon != null) {
+                    if (story.lat != null && story.lon != null && FlavorConfig.isPaidVersion) {
                       var userLatLng = LatLng(
                         story.lat ?? 0,
                         story.lon ?? 0,

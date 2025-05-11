@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:intermediate_flutter/flavor_config.dart';
 import 'package:provider/provider.dart';
 import 'package:intermediate_flutter/components/google_maps.dart';
 import 'package:intermediate_flutter/components/my_app_bar.dart';
@@ -11,10 +12,12 @@ import 'package:intermediate_flutter/provider/story_provider.dart';
 
 class AddStoryScreen extends StatefulWidget {
   final Function addStoryButtonOnPressed;
+  final Function showDialogPermissionVersion;
 
   const AddStoryScreen({
     super.key,
     required this.addStoryButtonOnPressed,
+    required this.showDialogPermissionVersion
   });
 
   static const String routeName = '/add_story';
@@ -50,10 +53,7 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
               );
         },
         needStoryWithLocationButton: true,
-        storyWithLocationButtonOnPressed: () {
-          storyProvider
-              .setStoryNeedLocation(!storyProvider.isStoryNeedLocation);
-        },
+        storyWithLocationButtonOnPressed: widget.showDialogPermissionVersion,
         storyWithLocationButtonColor:
             storyProvider.isStoryNeedLocation ? Colors.red : Colors.white,
       ),
@@ -138,7 +138,7 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
             const SizedBox(height: 24),
 
             // Location Toggle Section
-            if (storyProvider.isStoryNeedLocation) ...[
+            if (FlavorConfig.isPaidVersion && storyProvider.isStoryNeedLocation) ...[
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

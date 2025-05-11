@@ -1,32 +1,33 @@
-import 'package:flutter/material.dart';
-
 enum FlavorType {
-  dev,
-  prod,
+  free,
+  paid,
 }
 
 class FlavorValues {
   final String titleApp;
+  final bool canAddLocation;
 
   const FlavorValues({
     this.titleApp = "StoryMap",
+    this.canAddLocation = false,
   });
 }
 
 class FlavorConfig {
   final FlavorType flavor;
-  final MaterialColor color;
   final FlavorValues values;
 
   static FlavorConfig? _instance;
 
   FlavorConfig({
-    this.flavor = FlavorType.dev,
-    this.color = Colors.orange,
-    this.values = const FlavorValues(),
+    required this.flavor,
+    required this.values,
   }) {
     _instance = this;
   }
 
-  static FlavorConfig get instance => _instance ?? FlavorConfig();
+  static FlavorConfig get instance => _instance ?? FlavorConfig(flavor: FlavorType.free, values: const FlavorValues());
+
+  static bool get isFreeVersion => _instance?.flavor == FlavorType.free;
+  static bool get isPaidVersion => _instance?.flavor == FlavorType.paid;
 }

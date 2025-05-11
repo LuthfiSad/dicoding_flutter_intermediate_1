@@ -57,5 +57,7 @@
   "changeLanguage": "Change Language",
   "withLocation": "With Location",
   "onlyStory": "Story",
-  "selectedMapType": "Select Map Type"
+  "selectedMapType": "Select Map Type",
+  "paidVersionTitle": "This page is only available in premium version",
+  "paidVersionDesc": "To access this page, you must buy the premium version"
 }

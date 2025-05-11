@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intermediate_flutter/components/funky_bouncy_loader.dart';
+import 'package:intermediate_flutter/flavor_config.dart';
 import 'package:provider/provider.dart';
 import 'package:intermediate_flutter/components/google_maps.dart';
 import 'package:intermediate_flutter/components/my_app_bar.dart';
@@ -226,7 +227,7 @@ class _DetailStoryScreenState extends State<DetailStoryScreen>
                         const SizedBox(height: 24),
 
                         // Location Section
-                        if (storyProvider.detailStory.lat != null &&
+                        if (FlavorConfig.isPaidVersion && storyProvider.detailStory.lat != null &&
                             storyProvider.detailStory.lon != null) ...[
                           Divider(
                             color: theme.colorScheme.outline.withOpacity(0.2),

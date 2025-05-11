@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intermediate_flutter/flavor_config.dart';
 import 'package:intermediate_flutter/local/preferences.dart';
 import 'package:intermediate_flutter/localization/main.dart';
 import 'package:intermediate_flutter/model/page_configuration.dart';
@@ -68,6 +69,7 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
   String? networkStatus;
 
   bool showLogoutDialog = false;
+  bool isPaidVersionDialog = false;
 
   List<Page> historyStack = [];
 
@@ -192,6 +194,19 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
       notificationMessage =
           AppLocalizations.of(navigatorKey.currentContext!)!.logoutSuccess;
       isLoggedIn = false;
+    }
+    notifyListeners();
+  }
+
+  void showDialogPermissionVersion() {
+    if (FlavorConfig.isPaidVersion) {
+      storyProvider.setStoryNeedLocation(!storyProvider.isStoryNeedLocation);
+    } else {
+      isPaidVersionDialog = true;
+      notificationTitle =
+          AppLocalizations.of(navigatorKey.currentContext!)!.paidVersionTitle;
+      notificationMessage =
+          AppLocalizations.of(navigatorKey.currentContext!)!.paidVersionDesc;
     }
     notifyListeners();
   }
@@ -387,6 +402,7 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
               addStory = true;
               notifyListeners();
             },
+            showDialogPermissionVersion: showDialogPermissionVersion,
           ),
         ),
         if (showLogoutDialog)
@@ -434,6 +450,7 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
                   notifyListeners();
                 }
               },
+              showDialogPermissionVersion: showDialogPermissionVersion,
             ),
           ),
         if (notificationTitle != null && notificationMessage != null)
@@ -443,7 +460,9 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
             onOk: () {
               notificationMessage = null;
               notificationTitle = null;
-              if (addStoryError != true) {
+              if (isPaidVersionDialog) {
+                isPaidVersionDialog = false;
+              } else if (addStoryError != true) {
                 addStory = false;
               }
               notifyListeners();

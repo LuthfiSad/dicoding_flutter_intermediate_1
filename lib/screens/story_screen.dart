@@ -5,20 +5,27 @@ import 'package:intermediate_flutter/components/story_list.dart';
 import 'package:intermediate_flutter/flavor_config.dart';
 import 'package:intermediate_flutter/provider/story_provider.dart';
 
-class StoryScreen extends StatelessWidget {
+class StoryScreen extends StatefulWidget {
   final Function logoutButtonOnPressed;
   final Function onTapped;
   final Function onAddStoryButtonPressed;
+  final Function showDialogPermissionVersion;
 
   const StoryScreen({
     super.key,
     required this.logoutButtonOnPressed,
     required this.onTapped,
     required this.onAddStoryButtonPressed,
+    required this.showDialogPermissionVersion,
   });
 
   static const String routeName = '/story';
 
+  @override
+  State<StoryScreen> createState() => _StoryScreenState();
+}
+
+class _StoryScreenState extends State<StoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Consumer<StoryProvider>(
@@ -27,12 +34,9 @@ class StoryScreen extends StatelessWidget {
           appBar: MyAppBar(
             title: FlavorConfig.instance.values.titleApp,
             needLogoutButton: true,
-            logoutButtonOnPressed: () => logoutButtonOnPressed(),
+            logoutButtonOnPressed: () => widget.logoutButtonOnPressed(),
             needStoryWithLocationButton: true,
-            storyWithLocationButtonOnPressed: () {
-              storyProvider
-                  .setStoryNeedLocation(!storyProvider.isStoryNeedLocation);
-            },
+            storyWithLocationButtonOnPressed: widget.showDialogPermissionVersion,
             storyWithLocationButtonColor:
                 storyProvider.isStoryNeedLocation ? Colors.red : Colors.white,
             storyWithLocationButtonIcon: storyProvider.isStoryNeedLocation
@@ -51,7 +55,7 @@ class StoryScreen extends StatelessWidget {
                     bottom: MediaQuery.of(context).size.height * 0.015,
                   ),
                   child: StoryList(
-                    onTapped: onTapped,
+                    onTapped: widget.onTapped,
                   ),
                 ),
               ),
@@ -59,7 +63,7 @@ class StoryScreen extends StatelessWidget {
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
-              onAddStoryButtonPressed();
+              widget.onAddStoryButtonPressed();
             },
             child: const Icon(
               Icons.add,
