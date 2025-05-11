@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intermediate_flutter/flavor_config.dart';
 
 class StoryCard extends StatelessWidget {
   final String id;
@@ -93,7 +94,7 @@ class StoryCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                if (lat != 0 && lon != 0)
+                if (lat != 0 && lon != 0 && FlavorConfig.isPaidVersion)
                   Positioned(
                     top: 8,
                     right: 8,
